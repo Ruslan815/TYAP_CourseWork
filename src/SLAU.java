@@ -24,12 +24,12 @@ public class SLAU {
             {"", ""}
     };
 
-    static String[] nonTerminals = {"_", "A", "B"};
+    static String[] nonTerminals = {"", "A", "B"};
 
     static Map<String, Integer> indexesOfNonTerminalsMap = new HashMap<>();
 
     public static void forwardRun() {
-        // Решаем уравнение для первой строки
+        /*// Решаем уравнение для первой строки
         int currentNTIndex = 1; // indexesOfNonTerminalsMap.get(currentNonTerminal);
         String currentNonTerminal = nonTerminals[currentNTIndex];
         String alfa = matrix[currentNTIndex][currentNTIndex].substring(0, matrix[currentNTIndex][currentNTIndex].length() - 1); // alfa = b
@@ -49,21 +49,15 @@ public class SLAU {
         System.out.println("alfa: " + alfa);
         System.out.println("beta: " + beta);
 
-        String resultRule = "(" + alfa + ")*(" + beta + ")";
-        // Подставили на место нетерминала А полученное выражение a*b во все правила
-        /*for (int i = currentNTIndex + 1; i < matrix.length; i++) {
-            for (int j = 1; j < matrix[i].length; j++) {
-                matrix[i][j] = matrix[i][j].replace(currentNonTerminal, resultRule);
-            }
-        }*/
-
+        // Считаем коэффициенты перехода из первого уравнения
         coeffs[currentNTIndex][0] = alfa + "*" + matrix[currentNTIndex][0];
         for (int i = currentNTIndex + 1; i < coeffs[currentNTIndex].length; i++) { // Треугольная матрица СТРОГО, не надо считать коэффициенты для уже посчитанных уравнений!
             if (matrix[currentNTIndex][i].isEmpty()) continue;
             String resStr = alfa + "*" + matrix[currentNTIndex][i];
             coeffs[currentNTIndex][i] = resStr.substring(0, resStr.length() - 1);
-        }
+        }*/
 
+        // Создаём копию матрицы для нахождения BETA
         matrix2 = new String[matrix.length][matrix[0].length];
         for (int x = 0; x < matrix.length; x++) {
             System.arraycopy(matrix[x], 0, matrix2[x], 0, matrix[x].length);
@@ -71,8 +65,8 @@ public class SLAU {
 
         StringBuilder alfaSb = new StringBuilder();
         // Идём по всем уравнениям (строкам)
-        for (currentNTIndex = 2; currentNTIndex < matrix.length; currentNTIndex++) {
-            currentNonTerminal = nonTerminals[currentNTIndex];
+        for (int currentNTIndex = 1; currentNTIndex < matrix.length; currentNTIndex++) { // TODO 2
+            String currentNonTerminal = nonTerminals[currentNTIndex];
 
             // Записали в альфу коэффициент при самом нетерминале, если он есть
             String Aii = matrix[currentNTIndex][currentNTIndex];
@@ -141,8 +135,10 @@ public class SLAU {
             ///////////////////////////////////////////////
             // Beta
             ///////////////////////////////////////////////
+            List<String> betaList = new LinkedList<>();
             StringBuilder betaSb = new StringBuilder();
             if (!matrix2[currentNTIndex][0].isEmpty()) { // Добавляем свободный член, если не пустой
+                betaList.add(matrix2[currentNTIndex][0]);
                 betaSb.append(matrix2[currentNTIndex][0]).append("+");
             }
 
@@ -151,7 +147,8 @@ public class SLAU {
                 if (matrix2[currentNTIndex][i].isEmpty()) continue; // Пропускаем пустые правила
 
                 // Записываем коэффициент при правиле на случай, если получится раскрыть правило
-                StringBuilder tempCoeff = new StringBuilder(matrix2[currentNTIndex][i].substring(0, matrix2[currentNTIndex][i].length() - 1));
+                StringBuilder tempCoeff = new StringBuilder();
+                String someCoeff = matrix2[currentNTIndex][i].substring(0, matrix2[currentNTIndex][i].length() - 1);
                 int tempIndex = i; // Индекс текущего РАСКРЫВАЕМОГО нетерминала
                 String tempNT = nonTerminals[i]; // Текущего РАСКРЫВАЕМЫЙ нетерминал
                 List<String> listOfNT = new LinkedList<>(); // Последовательность раскрытия нетерминалов
@@ -190,7 +187,16 @@ public class SLAU {
 
                 // Проходимся по пути вывода правила и добавляем коэффициенты
                 for (String s : listOfNT) {
-                    tempCoeff.append(coeffs[indexesOfNonTerminalsMap.get(s)][0]);
+                    for (int j = 0; j < matrix2[indexesOfNonTerminalsMap.get(s)].length; j++) {
+                        if (j == currentNTIndex) continue; // Коэффициент для ALFA
+                        if (j == 0) {
+                            betaList.add(someCoeff + coeffs[indexesOfNonTerminalsMap.get(s)][j]);
+                            tempCoeff.append(someCoeff).append(coeffs[indexesOfNonTerminalsMap.get(s)][j]).append("+"); // fb*a
+                        } else {
+                            betaList.add(someCoeff + coeffs[indexesOfNonTerminalsMap.get(s)][j] + nonTerminals[j]);
+                            tempCoeff.append(someCoeff).append(coeffs[indexesOfNonTerminalsMap.get(s)][j]).append(nonTerminals[j]).append("+"); // fb*dB
+                        }
+                    }
                 }
 
                 betaSb.append(tempCoeff).append("+");
@@ -200,8 +206,59 @@ public class SLAU {
                 }
             }
 
+            // Дозаписываем оставшиеся нерешённые уравнения справа от текущего нетерминала
+            for (int i = currentNTIndex + 1; i < matrix2[currentNTIndex].length; i++) {
+                betaList.add(matrix2[currentNTIndex][i]);
+                betaSb.append(matrix2[currentNTIndex][i]).append("+"); // hB
+            }
+
             betaSb.delete(betaSb.length() - 1, betaSb.length());
             System.out.println("Found BETA: " + betaSb);
+
+            // Смотрим всё, что записали в BETA и оттуда вычленяем нужные коэффициенты для нетерминалов
+            for (int i = 0; i < coeffs[0].length; i++) {
+                if (i == 0) { // Если ищем коэффициенты для свободных членов
+                    StringBuilder result = new StringBuilder();
+                    String tempCoeff = "";
+                    for (String s : betaList) {
+                        tempCoeff = s;
+                        if (!containNT(tempCoeff)) {
+                            result.append(tempCoeff).append("+");
+                        }
+                    }
+
+                    if (!result.isEmpty()) {
+                        result.delete(0, result.length() - 1);
+                        coeffs[currentNTIndex][0] = result.toString(); // Записали свободные Коэффициенты
+                    }
+                    continue;
+                }
+
+                StringBuilder result = new StringBuilder();
+                String tempCoeff = "";
+                for (String s : betaList) {
+                    tempCoeff = s;
+                    if (tempCoeff.contains(nonTerminals[i])) { // Если содержит нужный нетерминал
+                        result.append(tempCoeff).append("+");
+                    }
+                }
+
+                if (!result.isEmpty()) {
+                    result.delete(0, result.length() - 1);
+                    coeffs[currentNTIndex][i] = result.toString(); // Записали Коэффициенты для i-го нетерминала
+                }
+            }
+
+            alfaBeta[currentNTIndex][0] = "(" + alfaSb + ")";
+            alfaBeta[currentNTIndex][1] = "(" + betaSb + ")";
+
+            if (currentNTIndex == 1) {
+                // Создаём копию матрицы для нахождения BETA
+                matrix2 = new String[matrix.length][matrix[0].length];
+                for (int x = 0; x < matrix.length; x++) {
+                    System.arraycopy(matrix[x], 0, matrix2[x], 0, matrix[x].length);
+                }
+            }
         }
     }
 
