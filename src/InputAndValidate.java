@@ -221,4 +221,13 @@ public class InputAndValidate {
             Main.mapOfRules.put(someNonTerminal, arrOfRules);
         }
     }
+
+    public static void displayMapOfRules() {
+        /*for(Map.Entry<String, String[]> entry : mapOfRules.entrySet()) {
+            System.out.println(entry.getKey() + " : " + Arrays.toString(entry.getValue()));
+        }*/
+        /*for(Map.Entry<Character, ArrayList<Integer> > entry : exitMap.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }*/
+    }
 }
