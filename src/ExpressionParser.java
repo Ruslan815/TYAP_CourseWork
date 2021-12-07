@@ -1,25 +1,7 @@
 import java.util.LinkedList;
 import java.util.List;
 
-public class RegExpGenerator {
-    private List<String> klini(List<String> list, int maxLength) {
-        List<String> res = new LinkedList<>();
-        List<String> tmp = new LinkedList<>();
-        tmp = Combined(tmp, list);
-        res.add("");
-        //res.AddRange(tmp.FindAll(x => x.Length <= maxLength));
-        res.addAll(tmp.stream().filter(x -> x.length() <= maxLength).toList());
-
-        //while (tmp.Count(x => x.Length < maxLength) > 0)
-        while (tmp.stream().anyMatch(x -> x.length() < maxLength)) {
-            tmp = Combined(tmp, list);
-            //res.AddRange(tmp.FindAll(x => x.Length <= maxLength));
-            res.addAll(tmp.stream().filter(x -> x.length() <= maxLength).toList());
-        }
-
-        return res;
-    }
-
+public class ExpressionParser {
     private List<String> splitByPluses(String str) // Разделяем выражения по знаку +
     {
         List<String> splitedString = new LinkedList<>();
@@ -39,7 +21,7 @@ public class RegExpGenerator {
         return splitedString;
     }
 
-    private List<String> recursion(String str, int minLenght, int maxLenght) {
+    private List<String> recursion(String str) {
         List<String> splitedList = splitByPluses(str);
         List<String> ans = new LinkedList<>();
 
@@ -50,13 +32,16 @@ public class RegExpGenerator {
             {
                 if (substr.charAt(i) == '(') // Если оно в скобках
                 {
+                    // Не индекс, а длина
                     int indexOfClosetBracet = findClosestBracet(substr.substring(i + 1)); // Ищем конец скобки
                     if (i + indexOfClosetBracet + 1 < substr.length() && substr.charAt(i + indexOfClosetBracet + 1) == '*') // Если стоит * после скобок выражения
                     { // (a+b)*
-                        tempResultList = Combined(tempResultList, klini(recursion(substr.substring(i + 1, i + indexOfClosetBracet), minLenght, maxLenght), maxLenght)); // TODO
+                        tempResultList.add(substr.substring(i, i + indexOfClosetBracet + 1)); // Добавляем скобку со *
+                        tempResultList = Combined(tempResultList, recursion(substr.substring(i + indexOfClosetBracet + 2))); // Разбираем дальше следующую скобку
+                        break;
                     } else // Если после скобок не стоит *
                     {
-                        tempResultList = Combined(tempResultList, recursion(substr.substring(i + 1, i + indexOfClosetBracet), minLenght, maxLenght)); // TODO
+                        tempResultList = Combined(tempResultList, recursion(substr.substring(i + 1, i + indexOfClosetBracet)));
                     }
                     i += indexOfClosetBracet;
                 } else if (Character.isLetter(substr.charAt(i))) // Если встретили символ алфавита
@@ -64,8 +49,10 @@ public class RegExpGenerator {
                     if (i + 1 < substr.length() && substr.charAt(i + 1) == '*') // И после него стоит звёздочка
                     {
                         List<String> temp777List = new LinkedList<>();
-                        temp777List.add(String.valueOf(substr.charAt(i)));
-                        tempResultList = Combined(tempResultList, klini(temp777List, maxLenght));
+                        temp777List.add(substr.charAt(i) + "*");
+                        tempResultList = Combined(tempResultList, temp777List);
+                        i++;
+                        continue;
                     }
                     if (tempResultList.size() == 0) // Если в список ещё ничего не записано
                     {
@@ -123,13 +110,15 @@ public class RegExpGenerator {
         return index + 1;
     }
 
-    public List<String> solve(String str, int minLenght, int maxLenght) {
+    public List<String> solve(String str) {
         //return recursion(str, minLenght, maxLenght).FindAll(x => x.Length >= minLenght & x.Length <= maxLenght);
-        return recursion(str, minLenght, maxLenght).stream().filter(x -> x.length() >= minLenght && x.length() <= maxLenght).toList();
+        return recursion(str);
     }
 
-    /*public static void main(String[] args) {
-        RegExpGenerator generator = new RegExpGenerator();
-        System.out.println(generator.solve("(a+b)*",0, 2)); // "(b*(a+c(eb*c+f)*(d+eb*a)))" // (g+fb*c)* // (a+b)*
-    }*/
+    public static void main(String[] args) {
+        ExpressionParser parser = new ExpressionParser();
+        for (String str: parser.solve("(m((g+fb*c)*(e+fb*a+fb*dB+hB)))")) { // (a+b)(c+d) // (za*k(b+cD)) // (b*(a+cA+dB)) // (f(b*(a+cA+dB))) // ((g+fb*c)*(e+fb*a+fb*dB+hB)) // (k(b*(a+c((g+fb*c)*(e+fb*a+fb*dB+hB))+dB))) // (m((g+fb*c)*(e+fb*a+fb*dB+hB))) //
+            System.out.println(str);
+        }
+    }
 }
