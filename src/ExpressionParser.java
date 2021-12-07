@@ -26,6 +26,9 @@ public class ExpressionParser {
         List<String> ans = new LinkedList<>();
 
         //foreach (var substr in splitedList) // Проходимся по выражениям, разделённым плюсом
+        // TODO May be LL Grammar?
+        // for (int z = splitedList.size() - 1; z > 0; z--) {
+        //     String substr = splitedList.get(z);
         for (String substr : splitedList) {
             List<String> tempResultList = new LinkedList<>();
             for (int i = 0; i < substr.length(); i++) // Проходимся по выражению
@@ -36,7 +39,7 @@ public class ExpressionParser {
                     int indexOfClosetBracet = findClosestBracet(substr.substring(i + 1)); // Ищем конец скобки
                     if (i + indexOfClosetBracet + 1 < substr.length() && substr.charAt(i + indexOfClosetBracet + 1) == '*') // Если стоит * после скобок выражения
                     { // (a+b)*
-                        tempResultList.add(substr.substring(i, i + indexOfClosetBracet + 1)); // Добавляем скобку со *
+                        tempResultList.add(substr.substring(i, i + indexOfClosetBracet + 2)); // Добавляем скобку со *
                         tempResultList = Combined(tempResultList, recursion(substr.substring(i + indexOfClosetBracet + 2))); // Разбираем дальше следующую скобку
                         break;
                     } else // Если после скобок не стоит *
@@ -115,9 +118,10 @@ public class ExpressionParser {
         return recursion(str);
     }
 
+    // TODO Only for RL Grammar
     public static void main(String[] args) {
         ExpressionParser parser = new ExpressionParser();
-        for (String str: parser.solve("(m((g+fb*c)*(e+fb*a+fb*dB+hB)))")) { // (a+b)(c+d) // (za*k(b+cD)) // (b*(a+cA+dB)) // (f(b*(a+cA+dB))) // ((g+fb*c)*(e+fb*a+fb*dB+hB)) // (k(b*(a+c((g+fb*c)*(e+fb*a+fb*dB+hB))+dB))) // (m((g+fb*c)*(e+fb*a+fb*dB+hB))) //
+        for (String str: parser.solve("(d)*(a+b+c)")) { // (a+b)(c+d) // (za*k(b+cD)) // (b*(a+cA+dB)) // (f(b*(a+cA+dB))) // ((g+fb*c)*(e+fb*a+fb*dB+hB)) // (k(b*(a+c((g+fb*c)*(e+fb*a+fb*dB+hB))+dB))) // (m((g+fb*c)*(e+fb*a+fb*dB+hB))) //
             System.out.println(str);
         }
     }

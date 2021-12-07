@@ -10,9 +10,15 @@ public class SLAU {
             {"d", "eA", "fB"}
     };
 
-    static String[][] matrix2;
+    static String[] result = {
+            "",
+            "",
+            ""
+    };
 
-    static String[][] coeffs = {
+    // static String[][] matrix2;
+
+    /*static String[][] coeffs = {
             {"", "", ""},
             {"", "", ""}, // После первого уравнения
             {"", "", ""} // После второго уравнения и т.д.
@@ -22,7 +28,7 @@ public class SLAU {
             {"", ""},
             {"", ""},
             {"", ""}
-    };
+    };*/
 
     static String[] nonTerminals = {"", "A", "B"};
 
@@ -58,24 +64,98 @@ public class SLAU {
         }*/
 
         // Создаём копию матрицы для нахождения BETA
-        matrix2 = new String[matrix.length][matrix[0].length];
+        /*matrix2 = new String[matrix.length][matrix[0].length];
         for (int x = 0; x < matrix.length; x++) {
             System.arraycopy(matrix[x], 0, matrix2[x], 0, matrix[x].length);
-        }
+        }*/
 
-        StringBuilder alfaSb = new StringBuilder();
+
         // Идём по всем уравнениям (строкам)
         for (int currentNTIndex = 1; currentNTIndex < matrix.length; currentNTIndex++) { // TODO 2
+            StringBuilder alfaSb = new StringBuilder();
+            StringBuilder betaSb = new StringBuilder();
             String currentNonTerminal = nonTerminals[currentNTIndex];
 
-            // Записали в альфу коэффициент при самом нетерминале, если он есть
+            // Записали в альфу коэффициент при самом нетерминале(A[i][i]), если он есть
             String Aii = matrix[currentNTIndex][currentNTIndex];
             if (!Aii.isEmpty()) {
                 alfaSb.append(Aii.substring(0, Aii.length() - 1)).append("+");
             }
 
-            // Идём по всем правилам ДО ТЕКУЩЕГО ИНДЕКСА, подсталяем a*b(раскрываем правила) и ищем коэффициент при текущем нетерминале
+            // Свободный член записываем в бету, если он есть
+            if (!matrix[currentNTIndex][0].isEmpty()) {
+                betaSb.append(matrix[currentNTIndex][0]).append("+");
+            }
+
+            // Добавляем в бету коэфф. после A[i][i], если они есть
+            for (int i = currentNTIndex + 1; i < matrix[currentNTIndex].length; i++) {
+                if (!matrix[currentNTIndex][i].isEmpty()) {
+                    betaSb.append(matrix[currentNTIndex][i]).append("+");
+                }
+            }
+
+            // Подставляем вычисленные ранее значения в многочлены
             for (int i = 1; i < currentNTIndex; i++) {
+                if (matrix[currentNTIndex][i].isEmpty()) continue; // Пропускаем пустые правила
+
+                List<String> coeffsList = new LinkedList<>();
+                ExpressionParser parser = new ExpressionParser();
+                coeffsList = parser.solve(matrix[currentNTIndex][i]);
+
+                // Распределяем полученные коэфф. на Альфа и Бета
+                for (String someStr: coeffsList) {
+                    if (someStr.contains(currentNonTerminal)) {
+                        alfaSb.append(someStr.substring(0, someStr.length() - 1)).append("+");
+                    } else {
+                        betaSb.append(someStr).append("+");
+                    }
+                }
+
+                /*System.out.println("PARSED:");
+                for (String someStr: coeffsList) {
+                    System.out.println(someStr);
+                }*/
+            }
+
+            alfaSb.delete(alfaSb.length() - 1, alfaSb.length());
+            betaSb.delete(betaSb.length() - 1, betaSb.length());
+
+            System.out.println("ALFA");
+            System.out.println(alfaSb);
+
+            System.out.println("BETA");
+            System.out.println(betaSb);
+
+            if (!alfaSb.isEmpty() && !betaSb.isEmpty()) { // a*b
+                result[currentNTIndex] = "((" + alfaSb + ")*(" + betaSb + "))";
+            } else if (alfaSb.isEmpty() && !betaSb.isEmpty()) { // b
+                result[currentNTIndex] = "(" + betaSb + ")";
+            } else if (!alfaSb.isEmpty() && betaSb.isEmpty()) { // a*
+                result[currentNTIndex] = "(" + alfaSb + ")*";
+            }
+
+            for (int i = currentNTIndex + 1; i < matrix.length; i++) {
+                for (int j = 1; j < matrix[i].length; j++) {
+                    if (matrix[i][j].contains(currentNonTerminal)) {
+                        matrix[i][j] = matrix[i][j].replace(currentNonTerminal, result[currentNTIndex]);
+                        /*if (!alfaSb.isEmpty() && !betaSb.isEmpty()) { // a*b
+                            result[currentNTIndex] = "((" + alfaSb + ")*(" + betaSb + "))";
+                            matrix[i][j] = matrix[i][j].replace(currentNonTerminal, "((" + alfaSb + ")*(" + betaSb + "))");
+                        } else if (alfaSb.isEmpty() && !betaSb.isEmpty()) { // b
+                            result[currentNTIndex] = "(" + betaSb + ")";
+                            matrix[i][j] = matrix[i][j].replace(currentNonTerminal, "(" + betaSb + ")");
+                        } else if (!alfaSb.isEmpty() && betaSb.isEmpty()) { // a*
+                            result[currentNTIndex] = "(" + alfaSb + ")*";
+                            matrix[i][j] = matrix[i][j].replace(currentNonTerminal, "(" + alfaSb + ")*");
+                        } else if (alfaSb.isEmpty() && betaSb.isEmpty()) { // Пустота
+                            matrix[i][j] = matrix[i][j].replace(currentNonTerminal, "");
+                        }*/
+                    }
+                }
+            }
+
+            // Идём по всем правилам ДО ТЕКУЩЕГО ИНДЕКСА, подсталяем a*b(раскрываем правила) и ищем коэффициент при текущем нетерминале
+            /*for (int i = 1; i < currentNTIndex; i++) {
                 if (matrix[currentNTIndex][i].isEmpty()) continue; // Пропускаем пустые правила
 
                 // Записываем коэффициент при правиле на случай, если получится раскрыть правило
@@ -130,12 +210,12 @@ public class SLAU {
             }
 
             alfaSb.delete(alfaSb.length() - 1, alfaSb.length());
-            System.out.println("Found ALFA: " + alfaSb);
+            System.out.println("Found ALFA: " + alfaSb);*/
 
             ///////////////////////////////////////////////
             // Beta
             ///////////////////////////////////////////////
-            List<String> betaList = new LinkedList<>();
+            /*List<String> betaList = new LinkedList<>();
             StringBuilder betaSb = new StringBuilder();
             if (!matrix2[currentNTIndex][0].isEmpty()) { // Добавляем свободный член, если не пустой
                 betaList.add(matrix2[currentNTIndex][0]);
@@ -258,7 +338,7 @@ public class SLAU {
                 for (int x = 0; x < matrix.length; x++) {
                     System.arraycopy(matrix[x], 0, matrix2[x], 0, matrix[x].length);
                 }
-            }
+            }*/
         }
     }
 
@@ -280,22 +360,22 @@ public class SLAU {
         return "";
     }
 
-    /*public static void reverseRun() {
-        for (int i = matrix.length - 1; i > 0; i--) {
-            String currentNonTerminal = nonTerminals[i];
-
-            for (int j = 0; j < i; j++) { // Заменяем все вхождения текущего нетерминала на РВ (a*b)
-                matrix[j] = matrix[j].replace(currentNonTerminal, matrix[i]);
+    public static void reverseRun() {
+        for (int currentNTIndex = matrix.length - 1; currentNTIndex >= 1; currentNTIndex--) {
+            for (int i = currentNTIndex + 1; i < matrix.length; i++) {
+                if (result[currentNTIndex].contains(nonTerminals[i])) {
+                    result[currentNTIndex] = result[currentNTIndex].replace(nonTerminals[i], result[i]);
+                }
             }
         }
-    }*/
+    }
 
     public static void main(String[] args) {
         indexesOfNonTerminalsMap.put("A", 1);
         indexesOfNonTerminalsMap.put("B", 2);
 
         forwardRun();
-        //reverseRun();
+        System.out.println("MATRIX");
         for (String[] arr : matrix) {
             for (String str : arr) {
                 System.out.print(str + " : ");
@@ -303,6 +383,26 @@ public class SLAU {
             System.out.println();
         }
 
+        System.out.println("RESULT");
+        for (String str : result) {
+            System.out.println(str);
+        }
+
+        reverseRun();
+        System.out.println("MATRIX");
+        for (String[] arr : matrix) {
+            for (String str : arr) {
+                System.out.print(str + " : ");
+            }
+            System.out.println();
+        }
+
+        System.out.println("RESULT");
+        for (String str : result) {
+            System.out.println(str);
+        }
+
+        /*System.out.println("COEFFS");
         for (String[] arr : coeffs) {
             for (String str : arr) {
                 System.out.print(str + " : ");
@@ -310,11 +410,12 @@ public class SLAU {
             System.out.println();
         }
 
+        System.out.println("ALFA_BETA");
         for (String[] arr : alfaBeta) {
             for (String str : arr) {
                 System.out.print(str + " : ");
             }
             System.out.println();
-        }
+        }*/
     }
 }
