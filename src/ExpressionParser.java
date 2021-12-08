@@ -39,8 +39,16 @@ public class ExpressionParser {
                     int indexOfClosetBracet = findClosestBracet(substr.substring(i + 1)); // Ищем конец скобки
                     if (i + indexOfClosetBracet + 1 < substr.length() && substr.charAt(i + indexOfClosetBracet + 1) == '*') // Если стоит * после скобок выражения
                     { // (a+b)*
-                        tempResultList.add(substr.substring(i, i + indexOfClosetBracet + 2)); // Добавляем скобку со *
-                        tempResultList = Combined(tempResultList, recursion(substr.substring(i + indexOfClosetBracet + 2))); // Разбираем дальше следующую скобку
+                        if (indexOfClosetBracet == 2) { // Если встретили скобку вида: (а)*, то убираем скобки
+                            String someTempSubStr = substr.substring(i, i + indexOfClosetBracet + 2);
+                            someTempSubStr = someTempSubStr.replace("(", "").replace(")", "");
+                            tempResultList.add(someTempSubStr); // Добавляем символ со *
+                        } else {
+                            tempResultList.add(substr.substring(i, i + indexOfClosetBracet + 2)); // Добавляем скобку со *
+                        }
+                        if (i + indexOfClosetBracet + 2 <= substr.length() - 1) { // Если строка не кончилась
+                            tempResultList = Combined(tempResultList, recursion(substr.substring(i + indexOfClosetBracet + 2))); // Разбираем дальше следующую скобку
+                        }
                         break;
                     } else // Если после скобок не стоит *
                     {
