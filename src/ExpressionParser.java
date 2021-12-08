@@ -56,7 +56,7 @@ public class ExpressionParser {
                         tempResultList = Combined(tempResultList, recursion(substr.substring(i + 1, i + indexOfClosetBracet)));
                     }
                     i += indexOfClosetBracet;
-                } else if (Character.isLetter(substr.charAt(i)) || substr.charAt(i) == '!') // Если встретили символ алфавита
+                } else if (Character.isLetter(substr.charAt(i))) // Если встретили символ алфавита //  || substr.charAt(i) == '!'
                 {
                     if (i + 1 < substr.length() && substr.charAt(i + 1) == '*') // И после него стоит звёздочка
                     {

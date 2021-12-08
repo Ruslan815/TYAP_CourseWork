@@ -59,7 +59,7 @@ public class RegExpGenerator {
                         tempResultList = Combined(tempResultList, recursion(substr.substring(i + 1, i + indexOfClosetBracet), minLenght, maxLenght)); // TODO
                     }
                     i += indexOfClosetBracet;
-                } else if (Character.isLetter(substr.charAt(i)) || substr.charAt(i) == '!') // Если встретили символ алфавита
+                } else if (Character.isLetter(substr.charAt(i))) // Если встретили символ алфавита //  || substr.charAt(i) == '!'
                 {
                     if (i + 1 < substr.length() && substr.charAt(i + 1) == '*') // И после него стоит звёздочка
                     {
@@ -152,6 +152,7 @@ public class RegExpGenerator {
         System.out.println(); // "(b*(a+c(eb*c+f)*(d+eb*a)))" // (g+fb*c)* // (a+b)* // (y+((c+ys*x)(as*x+z)*)a)(s)**/
 
         //System.out.println(generator.solve("(y((s)*(!+x((z+a(s)*x)*(a(s)*!))))+c((z+a(s)*x)*(a(s)*!)))", 0, 3));
-        System.out.println(generator.solve("(y+y((s)*(s+x((z+a(s)*x)*(a+a(s)*s))))+c((z+a(s)*x)*(a+a(s)*s)))", 0, 4));
+        //System.out.println(generator.solve("(y+y((s)*(s+x((z+a(s)*x)*(a+a(s)*s))))+c((z+a(s)*x)*(a+a(s)*s)))", 0, 4));
+        System.out.println(generator.solve("(y+c+y((s)*(s+x+x((z+(s)*x)*(z+(s)*s+(s)*x))))+c((z+(s)*x)*(z+(s)*s+(s)*x)))", 0, 3));
     }
 }

@@ -375,7 +375,7 @@ public class SLAU {
     public static void main(String[] args) {
         String[][] LLG = {
                 {"", "", ""},
-                {"y", "Ss", "Aa"},
+                {"y", "Ss", "A"},
                 {"c", "Sx", "Az"}
         };
 

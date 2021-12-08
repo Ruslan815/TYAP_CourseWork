@@ -5,7 +5,9 @@ import java.util.*;
 
 public class Main {
     // G = {acsxyz; F, S, A, K; F -> cA | yS, A -> zA | aS, S -> sS | xA | K, K -> !; F}
-    // G = {acsxyz; S, A; S -> y | Ss | Aa, A -> c | Sx | Az; S}
+
+    // G = {acsxyz; S, A; S -> y | Ss | Aa, A -> c | Sx | Az; S} WORK (LL)
+    // G = {acsxyz; S, A; S -> y | Ss | A, A -> c | Sx | Az; S} WORK (LL with lambda transition)
     static final int LIMIT_OF_STEPS = 100;
     static String grammar = "G = {ab; S, A; S -> aA | bS, A -> aA | a; S}"; // Знак ! означает лямбду (пустой символ)
     // private static String grammar = "G = {01; S, A; S -> 1A | 0A, A -> 1 | 0 | !; S}";
