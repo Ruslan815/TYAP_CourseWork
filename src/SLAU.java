@@ -396,8 +396,14 @@ public class SLAU {
                 {"d", "eA", "fB"}
         };
 
+        String[][] RLG1 = {
+                {"", "", ""},
+                {"a", "(b+z)A", "cB"},
+                {"d", "eA", "fB"}
+        };
+
         nonTerminals = new String[]{"", "A", "B"};
-        matrix = RLG;
+        matrix = RLG1;
         result = new String[matrix.length];
         Arrays.fill(result, "");
 

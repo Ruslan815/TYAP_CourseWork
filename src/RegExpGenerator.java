@@ -155,6 +155,7 @@ public class RegExpGenerator {
         //System.out.println(generator.solve("(y+y((s)*(s+x((z+a(s)*x)*(a+a(s)*s))))+c((z+a(s)*x)*(a+a(s)*s)))", 0, 4));
         //System.out.println(generator.solve("(y+c+y((s)*(s+x+x((z+(s)*x)*(z+(s)*s+(s)*x))))+c((z+(s)*x)*(z+(s)*s+(s)*x)))", 0, 3));
         //System.out.println(generator.solve("(y+y((s)*(s+x((z+a(s)*x+k(s)*x)*((a+k)+a(s)*s+k(s)*s))))+c((z+a(s)*x+k(s)*x)*((a+k)+a(s)*s+k(s)*s)))", 0, 3));
-        System.out.println(generator.solve("((b)*(a+c((f+e(b)*c)*(d+e(b)*a))))", 0, 3));
+        //System.out.println(generator.solve("((b)*(a+c((f+e(b)*c)*(d+e(b)*a))))", 0, 3));
+        System.out.println(generator.solve("(((b+z))*(a+c((f+e((b+z))*c)*(d+e((b+z))*a))))", 0, 3));
     }
 }

@@ -12,6 +12,7 @@ public class Main {
 
 
     // G = {abcdef; S, A; S -> a | bS | cA, A -> d | eS | fA; S} WORK (RLG)
+    // G = {abcdefz; S, A; S -> a | bS | cA | zS, A -> d | eS | fA; S} WORK (RLG1 выражение в скобках в качестве терминала)
 
 
     static final int LIMIT_OF_STEPS = 100;
