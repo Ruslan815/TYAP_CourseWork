@@ -16,7 +16,7 @@ public class InputAndValidate {
         int isUserGrammar = scanner.nextInt();
         if (isUserGrammar == 1) {
             System.out.println("Введите грамматику (G = {\"\"; [ , ]; [ , ]; \"\"}): ");
-            Main.grammar = reader.readLine();
+            GrammarGenerator.grammar = reader.readLine();
             // grammar = scanner.next();
             // System.out.println(inputStr);
         } else if (isUserGrammar != 0) {
@@ -31,15 +31,15 @@ public class InputAndValidate {
             System.err.println("Wrong type of output grammar type!");
             throw new IOException();
         } else if (outputTypeStr.equals("L")) {
-            Main.grammarType = "L";
+            GrammarGenerator.grammarType = "L";
         } else {
-            Main.grammarType = "R";
+            GrammarGenerator.grammarType = "R";
         }
 
         System.out.print("Введите диапазон длин генерируемых цепочек (start end): ");
-        Main.startLength = scanner.nextInt();
-        Main.endLength = scanner.nextInt();
-        if (Main.startLength < 0 || Main.endLength < 0 || Main.startLength > Main.endLength) {
+        GrammarGenerator.startLength = scanner.nextInt();
+        GrammarGenerator.endLength = scanner.nextInt();
+        if (GrammarGenerator.startLength < 0 || GrammarGenerator.endLength < 0 || GrammarGenerator.startLength > GrammarGenerator.endLength) {
             System.err.println("Invalid range of generate sequences length!");
             throw new IOException();
         }
@@ -49,12 +49,12 @@ public class InputAndValidate {
     }
 
     public static Grammar parseGrammar() throws Exception {
-        Main.grammar = Main.grammar.replace(" ", "");
-        Main.grammar = Main.grammar.replace("{", "");
-        Main.grammar = Main.grammar.replace("}", "");
-        Main.grammar = Main.grammar.substring(2);
+        GrammarGenerator.grammar = GrammarGenerator.grammar.replace(" ", "");
+        GrammarGenerator.grammar = GrammarGenerator.grammar.replace("{", "");
+        GrammarGenerator.grammar = GrammarGenerator.grammar.replace("}", "");
+        GrammarGenerator.grammar = GrammarGenerator.grammar.substring(2);
 
-        String[] grammarMembers = Main.grammar.split(";");
+        String[] grammarMembers = GrammarGenerator.grammar.split(";");
 
         char[] terminals = grammarMembers[0].toCharArray();
         String[] nonTerminals = grammarMembers[1].split(",");
@@ -141,7 +141,7 @@ public class InputAndValidate {
      * Проверяем на корректность формат левой и правой части правил
      */
     public static void validateRules(String[] rules, char[] terminals, String[] nonTerminals) throws Exception {
-        Main.nonTerminalsSet = new HashSet<>();
+        GrammarGenerator.nonTerminalsSet = new HashSet<>();
         for (String rule : rules) {
             // Validate of Left part of rule
             if (!Character.isUpperCase(rule.charAt(0))) {
@@ -151,7 +151,7 @@ public class InputAndValidate {
                 System.err.println("Character is not nonTerminal");
                 throw new Exception();
             } else {
-                Main.nonTerminalsSet.add(rule.charAt(0));
+                GrammarGenerator.nonTerminalsSet.add(rule.charAt(0));
             }
 
             if (rule.length() <= 3) {
@@ -185,7 +185,7 @@ public class InputAndValidate {
         }
 
         // Sanity check
-        if (Main.nonTerminalsSet.size() != nonTerminals.length) {
+        if (GrammarGenerator.nonTerminalsSet.size() != nonTerminals.length) {
             System.err.println("All nonTerminal must be used in rules!");
             throw new Exception();
         }
@@ -218,7 +218,7 @@ public class InputAndValidate {
                     break;
                 }
             }
-            Main.mapOfRules.put(someNonTerminal, arrOfRules);
+            GrammarGenerator.mapOfRules.put(someNonTerminal, arrOfRules);
         }
     }
 

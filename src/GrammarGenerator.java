@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class Main {
+public class GrammarGenerator {
     // G = {acsxyz; F, S, A, K; F -> cA | yS, A -> zA | aS, S -> sS | xA | K, K -> !; F}
 
     // G = {acsxyz; S, A; S -> y | Ss | Aa, A -> c | Sx | Az; S} WORK (LLG)
