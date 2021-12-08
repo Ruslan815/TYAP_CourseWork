@@ -9,14 +9,12 @@ public class ExpressionParser {
         int prevInd = 0;
         for (int i = 0; i < str.length(); i++) {
             if (depth == 0 && str.charAt(i) == '+') {
-                //splitedString.Add(str.Substring(prevInd, i - prevInd)); // длина
                 splitedString.add(str.substring(prevInd, i)); // конечный индекс
                 prevInd = i + 1;
             }
             if (str.charAt(i) == '(') depth++;
             if (str.charAt(i) == ')') depth--;
         }
-        //splitedString.Add(str.Substring(prevInd));
         splitedString.add(str.substring(prevInd));
         return splitedString;
     }
@@ -25,10 +23,7 @@ public class ExpressionParser {
         List<String> splitedList = splitByPluses(str);
         List<String> ans = new LinkedList<>();
 
-        //foreach (var substr in splitedList) // Проходимся по выражениям, разделённым плюсом
-        // TODO May be LL Grammar?
-        // for (int z = splitedList.size() - 1; z > 0; z--) {
-        //     String substr = splitedList.get(z);
+        // Проходимся по выражениям, разделённым плюсом
         for (String substr : splitedList) {
             List<String> tempResultList = new LinkedList<>();
             for (int i = 0; i < substr.length(); i++) // Проходимся по выражению
@@ -40,13 +35,7 @@ public class ExpressionParser {
                     if (i + indexOfClosetBracet + 1 < substr.length() && substr.charAt(i + indexOfClosetBracet + 1) == '*') // Если стоит * после скобок выражения
                     { // (a+b)*
                         tempResultList.add(substr.substring(i, i + indexOfClosetBracet + 2)); // Добавляем скобку со *
-                        /*if (indexOfClosetBracet == 2) { // Если встретили скобку вида: (а)*, то убираем скобки
-                            String someTempSubStr = substr.substring(i, i + indexOfClosetBracet + 2);
-                            someTempSubStr = someTempSubStr.replace("(", "").replace(")", "");
-                            tempResultList.add(someTempSubStr); // Добавляем символ со *
-                        } else {
-                            tempResultList.add(substr.substring(i, i + indexOfClosetBracet + 2)); // Добавляем скобку со *
-                        }*/
+
                         if (i + indexOfClosetBracet + 2 <= substr.length() - 1) { // Если строка не кончилась TODO
                             tempResultList = Combined(tempResultList, recursion(substr.substring(i + indexOfClosetBracet + 2))); // Разбираем дальше следующую скобку
                         }
@@ -56,7 +45,7 @@ public class ExpressionParser {
                         tempResultList = Combined(tempResultList, recursion(substr.substring(i + 1, i + indexOfClosetBracet)));
                     }
                     i += indexOfClosetBracet;
-                } else if (Character.isLetter(substr.charAt(i))) // Если встретили символ алфавита //  || substr.charAt(i) == '!'
+                } else if (Character.isLetter(substr.charAt(i))) // Если встретили символ алфавита
                 {
                     if (i + 1 < substr.length() && substr.charAt(i + 1) == '*') // И после него стоит звёздочка
                     {
@@ -78,7 +67,6 @@ public class ExpressionParser {
                 }
             }
 
-            //ans.AddRange(tempResultList);
             ans.addAll(tempResultList);
         }
 
@@ -123,11 +111,10 @@ public class ExpressionParser {
     }
 
     public List<String> solve(String str) {
-        //return recursion(str, minLenght, maxLenght).FindAll(x => x.Length >= minLenght & x.Length <= maxLenght);
         return recursion(str);
     }
 
-    // TODO Only for RL Grammar
+    // Only for RL Grammar
     public static void main(String[] args) {
         ExpressionParser parser = new ExpressionParser();
         for (String str: parser.solve("(d)*(a+b+c)")) { // (a+b)(c+d) // (za*k(b+cD)) // (b*(a+cA+dB)) // (f(b*(a+cA+dB))) // ((g+fb*c)*(e+fb*a+fb*dB+hB)) // (k(b*(a+c((g+fb*c)*(e+fb*a+fb*dB+hB))+dB))) // (m((g+fb*c)*(e+fb*a+fb*dB+hB))) //
