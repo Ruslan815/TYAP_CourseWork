@@ -13,6 +13,7 @@ public class Main {
 
     // G = {abcdef; S, A; S -> a | bS | cA, A -> d | eS | fA; S} WORK (RLG)
     // G = {abcdefz; S, A; S -> a | bS | cA | zS, A -> d | eS | fA; S} WORK (RLG1 выражение в скобках в качестве терминала)
+    // G = {abcdef; S, A; S -> a | S | cA, A -> d | eS | fA; S} WORK (RLG2 with lambda transition) сделай лимит рекурсии меньше (10)
 
 
     static final int LIMIT_OF_STEPS = 100;
