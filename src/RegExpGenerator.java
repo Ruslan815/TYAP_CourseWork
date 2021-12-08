@@ -7,13 +7,10 @@ public class RegExpGenerator {
         List<String> tmp = new LinkedList<>();
         tmp = Combined(tmp, list);
         res.add("");
-        //res.AddRange(tmp.FindAll(x => x.Length <= maxLength));
         res.addAll(tmp.stream().filter(x -> x.length() <= maxLength).toList());
 
-        //while (tmp.Count(x => x.Length < maxLength) > 0)
         while (tmp.stream().anyMatch(x -> x.length() < maxLength)) {
             tmp = Combined(tmp, list);
-            //res.AddRange(tmp.FindAll(x => x.Length <= maxLength));
             res.addAll(tmp.stream().filter(x -> x.length() <= maxLength).toList());
         }
 
@@ -27,14 +24,12 @@ public class RegExpGenerator {
         int prevInd = 0;
         for (int i = 0; i < str.length(); i++) {
             if (depth == 0 && str.charAt(i) == '+') {
-                //splitedString.Add(str.Substring(prevInd, i - prevInd)); // длина
                 splitedString.add(str.substring(prevInd, i)); // конечный индекс
                 prevInd = i + 1;
             }
             if (str.charAt(i) == '(') depth++;
             if (str.charAt(i) == ')') depth--;
         }
-        //splitedString.Add(str.Substring(prevInd));
         splitedString.add(str.substring(prevInd));
         return splitedString;
     }
@@ -43,7 +38,7 @@ public class RegExpGenerator {
         List<String> splitedList = splitByPluses(str);
         List<String> ans = new LinkedList<>();
 
-        //foreach (var substr in splitedList) // Проходимся по выражениям, разделённым плюсом
+        // Проходимся по выражениям, разделённым плюсом
         for (String substr : splitedList) {
             List<String> tempResultList = new LinkedList<>();
             for (int i = 0; i < substr.length(); i++) // Проходимся по выражению
@@ -79,7 +74,6 @@ public class RegExpGenerator {
                 }
             }
 
-            //ans.AddRange(tempResultList);
             ans.addAll(tempResultList);
         }
 
@@ -124,7 +118,6 @@ public class RegExpGenerator {
     }
 
     public List<String> solve(String str, int minLenght, int maxLenght) {
-        //return recursion(str, minLenght, maxLenght).FindAll(x => x.Length >= minLenght & x.Length <= maxLenght);
         return recursion(str, minLenght, maxLenght).stream().filter(x -> x.length() >= minLenght && x.length() <= maxLenght).toList();
     }
 
