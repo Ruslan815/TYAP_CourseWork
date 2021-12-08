@@ -9,6 +9,11 @@ public class Main {
     // G = {acsxyz; S, A; S -> y | Ss | Aa, A -> c | Sx | Az; S} WORK (LLG)
     // G = {acsxyz; S, A; S -> y | Ss | A, A -> c | Sx | Az; S} WORK (LLG1 with lambda transition)
     // G = {acsxyzk; S, A; S -> y | Ss | Aa | Ak, A -> c | Sx | Az; S} WORK (LLG2 выражение в скобках в качестве терминала)
+
+
+    // G = {abcdef; S, A; S -> a | bS | cA, A -> d | eS | fA; S} WORK (RLG)
+
+
     static final int LIMIT_OF_STEPS = 100;
     static String grammar = "G = {ab; S, A; S -> aA | bS, A -> aA | a; S}"; // Знак ! означает лямбду (пустой символ)
     // private static String grammar = "G = {01; S, A; S -> 1A | 0A, A -> 1 | 0 | !; S}";

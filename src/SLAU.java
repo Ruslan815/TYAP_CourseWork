@@ -1,17 +1,10 @@
 import java.util.*;
 
 public class SLAU {
-    static String[][] matrix = {
-            {"", "", ""},
-            {"a", "bA", "cB"},
-            {"d", "eA", "fB"}
-    };
 
-    static String[] result = {
-            "",
-            "",
-            ""
-    };
+    static String[] nonTerminals;
+    static String[][] matrix;
+    static String[] result;
 
     // static String[][] matrix2;
 
@@ -27,7 +20,6 @@ public class SLAU {
             {"", ""}
     };*/
 
-    static String[] nonTerminals = {"", "A", "B"};
 
     static Map<String, Integer> indexesOfNonTerminalsMap = new HashMap<>();
 
@@ -391,9 +383,21 @@ public class SLAU {
                 {"c", "Sx", "Az"}
         };
 
+        /*
         ConvertLLGtoRLG converter = new ConvertLLGtoRLG(LLG);
         nonTerminals = converter.getNonTerminals();
         matrix = converter.getResult();
+        result = new String[matrix.length];
+        Arrays.fill(result, "");*/
+
+        String[][] RLG = {
+                {"", "", ""},
+                {"a", "bA", "cB"},
+                {"d", "eA", "fB"}
+        };
+
+        nonTerminals = new String[]{"", "A", "B"};
+        matrix = RLG;
         result = new String[matrix.length];
         Arrays.fill(result, "");
 
