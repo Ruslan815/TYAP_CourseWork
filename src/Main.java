@@ -15,6 +15,8 @@ public class Main {
     // G = {abcdefz; S, A; S -> a | bS | cA | zS, A -> d | eS | fA; S} WORK (RLG1 выражение в скобках в качестве терминала)
     // G = {abcdef; S, A; S -> a | S | cA, A -> d | eS | fA; S} WORK (RLG2 with lambda transition) сделай лимит рекурсии меньше (10)
 
+    // G = {abcdefghikmz; S, A, B; S -> a | bS | dB, A -> e | fS | gA, B -> i | kS | zB; S} WORK (RLG2 3 уравнения)
+
 
     static final int LIMIT_OF_STEPS = 100;
     static String grammar = "G = {ab; S, A; S -> aA | bS, A -> aA | a; S}"; // Знак ! означает лямбду (пустой символ)

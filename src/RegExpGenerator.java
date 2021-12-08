@@ -157,6 +157,8 @@ public class RegExpGenerator {
         //System.out.println(generator.solve("(y+y((s)*(s+x((z+a(s)*x+k(s)*x)*((a+k)+a(s)*s+k(s)*s))))+c((z+a(s)*x+k(s)*x)*((a+k)+a(s)*s+k(s)*s)))", 0, 3));
         //System.out.println(generator.solve("((b)*(a+c((f+e(b)*c)*(d+e(b)*a))))", 0, 3));
         //System.out.println(generator.solve("(((b+z))*(a+c((f+e((b+z))*c)*(d+e((b+z))*a))))", 0, 3));
-        System.out.println(generator.solve("(a+c((f+ec)*(d+ea)))", 0, 3));
+        //System.out.println(generator.solve("(a+c((f+ec)*(d+ea)))", 0, 3));
+        //System.out.println(generator.solve("((b)*(a+c((g+f(b)*c)*(e+h((z+k(b)*c(g+f(b)*c)*h+k(b)*c(g+f(b)*c)*fd+k(b)*c(g+f(b)*c)*(b)*d+k(b)*d+m(g+f(b)*c)*h+m(g+f(b)*c)*fd+m(g+f(b)*c)*(b)*d)*(i+k(b)*a+k(b)*c(g+f(b)*c)*e+k(b)*c(g+f(b)*c)*fa+k(b)*c(g+f(b)*c)*(b)*a+m(g+f(b)*c)*e+m(g+f(b)*c)*fa+m(g+f(b)*c)*(b)*a))+f(b)*a+f(b)*d((z+k(b)*c(g+f(b)*c)*h+k(b)*c(g+f(b)*c)*fd+k(b)*c(g+f(b)*c)*(b)*d+k(b)*d+m(g+f(b)*c)*h+m(g+f(b)*c)*fd+m(g+f(b)*c)*(b)*d)*(i+k(b)*a+k(b)*c(g+f(b)*c)*e+k(b)*c(g+f(b)*c)*fa+k(b)*c(g+f(b)*c)*(b)*a+m(g+f(b)*c)*e+m(g+f(b)*c)*fa+m(g+f(b)*c)*(b)*a))))+d((z+k(b)*c(g+f(b)*c)*h+k(b)*c(g+f(b)*c)*fd+k(b)*c(g+f(b)*c)*(b)*d+k(b)*d+m(g+f(b)*c)*h+m(g+f(b)*c)*fd+m(g+f(b)*c)*(b)*d)*(i+k(b)*a+k(b)*c(g+f(b)*c)*e+k(b)*c(g+f(b)*c)*fa+k(b)*c(g+f(b)*c)*(b)*a+m(g+f(b)*c)*e+m(g+f(b)*c)*fa+m(g+f(b)*c)*(b)*a))))", 0, 3));
+        System.out.println(generator.solve("((b)*(a+d((z+k(b)*d)*(i+k(b)*a))))", 0, 3));
     }
 }
