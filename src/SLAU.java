@@ -375,7 +375,19 @@ public class SLAU {
     public static void main(String[] args) {
         String[][] LLG = {
                 {"", "", ""},
+                {"y", "Ss", "Aa"},
+                {"c", "Sx", "Az"}
+        };
+
+        String[][] LLG1 = {
+                {"", "", ""},
                 {"y", "Ss", "A"},
+                {"c", "Sx", "Az"}
+        };
+
+        String[][] LLG2 = {
+                {"", "", ""},
+                {"y", "Ss", "A(a+k)"},
                 {"c", "Sx", "Az"}
         };
 
