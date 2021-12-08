@@ -39,14 +39,15 @@ public class ExpressionParser {
                     int indexOfClosetBracet = findClosestBracet(substr.substring(i + 1)); // Ищем конец скобки
                     if (i + indexOfClosetBracet + 1 < substr.length() && substr.charAt(i + indexOfClosetBracet + 1) == '*') // Если стоит * после скобок выражения
                     { // (a+b)*
-                        if (indexOfClosetBracet == 2) { // Если встретили скобку вида: (а)*, то убираем скобки
+                        tempResultList.add(substr.substring(i, i + indexOfClosetBracet + 2)); // Добавляем скобку со *
+                        /*if (indexOfClosetBracet == 2) { // Если встретили скобку вида: (а)*, то убираем скобки
                             String someTempSubStr = substr.substring(i, i + indexOfClosetBracet + 2);
                             someTempSubStr = someTempSubStr.replace("(", "").replace(")", "");
                             tempResultList.add(someTempSubStr); // Добавляем символ со *
                         } else {
                             tempResultList.add(substr.substring(i, i + indexOfClosetBracet + 2)); // Добавляем скобку со *
-                        }
-                        if (i + indexOfClosetBracet + 2 <= substr.length() - 1) { // Если строка не кончилась
+                        }*/
+                        if (i + indexOfClosetBracet + 2 <= substr.length() - 1) { // Если строка не кончилась TODO
                             tempResultList = Combined(tempResultList, recursion(substr.substring(i + indexOfClosetBracet + 2))); // Разбираем дальше следующую скобку
                         }
                         break;
@@ -55,7 +56,7 @@ public class ExpressionParser {
                         tempResultList = Combined(tempResultList, recursion(substr.substring(i + 1, i + indexOfClosetBracet)));
                     }
                     i += indexOfClosetBracet;
-                } else if (Character.isLetter(substr.charAt(i))) // Если встретили символ алфавита
+                } else if (Character.isLetter(substr.charAt(i)) || substr.charAt(i) == '!') // Если встретили символ алфавита
                 {
                     if (i + 1 < substr.length() && substr.charAt(i + 1) == '*') // И после него стоит звёздочка
                     {

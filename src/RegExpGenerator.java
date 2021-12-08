@@ -59,7 +59,7 @@ public class RegExpGenerator {
                         tempResultList = Combined(tempResultList, recursion(substr.substring(i + 1, i + indexOfClosetBracet), minLenght, maxLenght)); // TODO
                     }
                     i += indexOfClosetBracet;
-                } else if (Character.isLetter(substr.charAt(i))) // Если встретили символ алфавита
+                } else if (Character.isLetter(substr.charAt(i)) || substr.charAt(i) == '!') // Если встретили символ алфавита
                 {
                     if (i + 1 < substr.length() && substr.charAt(i + 1) == '*') // И после него стоит звёздочка
                     {
@@ -128,8 +128,30 @@ public class RegExpGenerator {
         return recursion(str, minLenght, maxLenght).stream().filter(x -> x.length() >= minLenght && x.length() <= maxLenght).toList();
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         RegExpGenerator generator = new RegExpGenerator();
-        System.out.println(generator.solve("(a+b)*",0, 2)); // "(b*(a+c(eb*c+f)*(d+eb*a)))" // (g+fb*c)* // (a+b)*
-    }*/
+        /*List<String> list1 = generator.solve("(y+((c+ys*x)(as*x+z)*)a)(s)*",0, 4);
+        List<String> list2 = generator.solve("((c((z)*(a(xz*a+s)*)))+(y(xz*a+s)*))",0, 4);
+        for (String str1 : list1) {
+            System.out.print(str1 + " : ");
+            if (!list2.contains(str1)) {
+                System.out.print("NO");
+            }
+            System.out.println();
+        }
+
+        System.out.println("\n");
+        for (String str2 : list2) {
+            System.out.print(str2 + " : ");
+            if (!list1.contains(str2)) {
+                System.out.print("NO");
+            }
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println(); // "(b*(a+c(eb*c+f)*(d+eb*a)))" // (g+fb*c)* // (a+b)* // (y+((c+ys*x)(as*x+z)*)a)(s)**/
+
+        //System.out.println(generator.solve("(y((s)*(!+x((z+a(s)*x)*(a(s)*!))))+c((z+a(s)*x)*(a(s)*!)))", 0, 3));
+        System.out.println(generator.solve("(y+y((s)*(s+x((z+a(s)*x)*(a+a(s)*s))))+c((z+a(s)*x)*(a+a(s)*s)))", 0, 4));
+    }
 }

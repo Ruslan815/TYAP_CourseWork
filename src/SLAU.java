@@ -1,7 +1,4 @@
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SLAU {
     static String[][] matrix = {
@@ -117,8 +114,13 @@ public class SLAU {
                 }*/
             }
 
-            alfaSb.delete(alfaSb.length() - 1, alfaSb.length());
-            betaSb.delete(betaSb.length() - 1, betaSb.length());
+            // Удаляем лишний последний плюс
+            if (!alfaSb.isEmpty()) {
+                alfaSb.delete(alfaSb.length() - 1, alfaSb.length());
+            }
+            if (!betaSb.isEmpty()) {
+                betaSb.delete(betaSb.length() - 1, betaSb.length());
+            }
 
             System.out.println("ALFA");
             System.out.println(alfaSb);
@@ -371,36 +373,56 @@ public class SLAU {
     }
 
     public static void main(String[] args) {
-        indexesOfNonTerminalsMap.put("A", 1);
-        indexesOfNonTerminalsMap.put("B", 2);
+        String[][] LLG = {
+                {"", "", ""},
+                {"y", "Ss", "Aa"},
+                {"c", "Sx", "Az"}
+        };
+
+        ConvertLLGtoRLG converter = new ConvertLLGtoRLG(LLG);
+        nonTerminals = converter.getNonTerminals();
+        matrix = converter.getResult();
+        result = new String[matrix.length];
+        Arrays.fill(result, "");
+
+        //indexesOfNonTerminalsMap.put("A", 1);
+        //indexesOfNonTerminalsMap.put("B", 2);
+
+        System.out.println("START MATRIX");
+        for (String[] arr : matrix) {
+            for (String str : arr) {
+                System.out.print(str + " : ");
+            }
+            System.out.println();
+        } System.out.println();
 
         forwardRun();
-        System.out.println("MATRIX");
+        System.out.println("FORWARD MATRIX");
         for (String[] arr : matrix) {
             for (String str : arr) {
                 System.out.print(str + " : ");
             }
             System.out.println();
-        }
+        } System.out.println();
 
         System.out.println("RESULT");
         for (String str : result) {
             System.out.println(str);
-        }
+        } System.out.println();
 
         reverseRun();
-        System.out.println("MATRIX");
+        System.out.println("REVERSE MATRIX");
         for (String[] arr : matrix) {
             for (String str : arr) {
                 System.out.print(str + " : ");
             }
             System.out.println();
-        }
+        } System.out.println();
 
         System.out.println("RESULT");
         for (String str : result) {
             System.out.println(str);
-        }
+        } System.out.println();
 
         /*System.out.println("COEFFS");
         for (String[] arr : coeffs) {
