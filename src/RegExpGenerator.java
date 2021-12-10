@@ -1,7 +1,15 @@
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.LinkedList;
 import java.util.List;
 
 public class RegExpGenerator {
+    private static List<List<String>> outputList = new LinkedList<>();
+
+    public static List<List<String>> getOutputList() {
+        return outputList;
+    }
+
     private List<String> klini(List<String> list, int maxLength) {
         List<String> res = new LinkedList<>();
         List<String> tmp = new LinkedList<>();
@@ -72,11 +80,14 @@ public class RegExpGenerator {
                         tempResultList = Combined(tempResultList, temp777List);
                     }
                 }
+                outputList.add(tempResultList);
+                //System.out.println(tempResultList);
             }
 
             ans.addAll(tempResultList);
         }
 
+        //System.out.println(ans);
         return ans;
     }
 
@@ -153,6 +164,7 @@ public class RegExpGenerator {
         //System.out.println(generator.solve("(a+c((f+ec)*(d+ea)))", 0, 3));
         //System.out.println(generator.solve("((b)*(a+c((g+f(b)*c)*(e+h((z+k(b)*c(g+f(b)*c)*h+k(b)*c(g+f(b)*c)*fd+k(b)*c(g+f(b)*c)*(b)*d+k(b)*d+m(g+f(b)*c)*h+m(g+f(b)*c)*fd+m(g+f(b)*c)*(b)*d)*(i+k(b)*a+k(b)*c(g+f(b)*c)*e+k(b)*c(g+f(b)*c)*fa+k(b)*c(g+f(b)*c)*(b)*a+m(g+f(b)*c)*e+m(g+f(b)*c)*fa+m(g+f(b)*c)*(b)*a))+f(b)*a+f(b)*d((z+k(b)*c(g+f(b)*c)*h+k(b)*c(g+f(b)*c)*fd+k(b)*c(g+f(b)*c)*(b)*d+k(b)*d+m(g+f(b)*c)*h+m(g+f(b)*c)*fd+m(g+f(b)*c)*(b)*d)*(i+k(b)*a+k(b)*c(g+f(b)*c)*e+k(b)*c(g+f(b)*c)*fa+k(b)*c(g+f(b)*c)*(b)*a+m(g+f(b)*c)*e+m(g+f(b)*c)*fa+m(g+f(b)*c)*(b)*a))))+d((z+k(b)*c(g+f(b)*c)*h+k(b)*c(g+f(b)*c)*fd+k(b)*c(g+f(b)*c)*(b)*d+k(b)*d+m(g+f(b)*c)*h+m(g+f(b)*c)*fd+m(g+f(b)*c)*(b)*d)*(i+k(b)*a+k(b)*c(g+f(b)*c)*e+k(b)*c(g+f(b)*c)*fa+k(b)*c(g+f(b)*c)*(b)*a+m(g+f(b)*c)*e+m(g+f(b)*c)*fa+m(g+f(b)*c)*(b)*a))))", 0, 3));
         //System.out.println(generator.solve("((b)*(a+d((z+k(b)*d)*(i+k(b)*a))))", 0, 3));
-        System.out.println(generator.solve("((b)*(a+d((z+k(g)*fd+k(g)*(b)*d)*(i+k(g)*e+k(g)*fa+k(g)*(b)*a))))", 0, 3));
+        //System.out.println(generator.solve("((b)*(a+d((z+k(g)*fd+k(g)*(b)*d)*(i+k(g)*e+k(g)*fa+k(g)*(b)*a))))", 0, 3));
+        System.out.println(generator.solve("(a+c((f+ec)*(d+ea)))", 0, 3));
     }
 }
