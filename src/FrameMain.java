@@ -10,8 +10,10 @@ public class FrameMain extends Frame implements ActionListener {
     TextArea outputArea = new TextArea();
     TextField fromField = new TextField();
     TextField toField = new TextField();
+    static FrameMain currentFrame;
 
     FrameMain() {
+        currentFrame = this;
         createMenu();
 
         Label outputLabel = new Label("Результаты:");
@@ -135,13 +137,13 @@ public class FrameMain extends Frame implements ActionListener {
                         должна выдаваться диагностика различий – где именно несовпадения и в чём они состоят.""");
                 break;
             case "Клавиатура":
-                // Форма для ввода с клавиатуры (textArea)
+                FrameInputFromKeyboard inputRGFrame = new FrameInputFromKeyboard("РГ");
                 break;
             case "Файл":
                 // Диалог выбора файла
                 break;
             case "Ввод РВ":
-                // Форма для ввода РВ с клавиатуры (textField)
+                FrameInputFromKeyboard inputRVFrame = new FrameInputFromKeyboard("РВ");
                 break;
             case "История":
                 createTextFrame("История", "Я история");
@@ -185,6 +187,23 @@ public class FrameMain extends Frame implements ActionListener {
             default:
                 System.err.println("Неизвестное событие");
         }
+    }
+
+    public static void setInputOfGrammar(String inputOfGrammar, String grammarType) {
+        GrammarGenerator.grammar = inputOfGrammar;
+        GrammarGenerator.grammarType = grammarType;
+        Grammar parsedGrammar;
+        try {
+            parsedGrammar = InputAndValidate.parseGrammar();
+        } catch (Exception someException) {
+            currentFrame.outputArea.setText("Grammar parsing Exception!");
+            return;
+        }
+        InputAndValidate.fillMapOfRules(parsedGrammar.getNonTerminals(), parsedGrammar.getRules());
+    }
+
+    public static void setInputOfRegExp(String regExpString) {
+        Main.someRegExp = regExpString;
     }
 
     /*public void createShowRGFrame() {

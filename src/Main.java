@@ -6,6 +6,8 @@ public class Main {
     public static String grammarType; // L or R
     public static boolean readFromFile = false; // Read data from file or from form
 
+    static String someRegExp;
+
     public static void inputDataFromFile() {
 
     }
