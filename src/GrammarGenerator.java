@@ -13,7 +13,7 @@ public class GrammarGenerator {
     // G = {abcdefghikmz; S, A, B; S -> a | bS | dB, A -> e | fS | gA, B -> i | kS | zB; S} WORK (RLG3 3 уравнения)
 
     static final int LIMIT_OF_STEPS = 100;
-    static String grammar = "G = {ab; S, A; S -> aA | bS, A -> aA | a; S}"; // Знак ! означает лямбду (пустой символ)
+    static String grammar = "G = {acsxyz; S, A; S -> y | Ss | Aa, A -> c | Sx | Az; S}"; // Знак ! означает лямбду (пустой символ)
     static int startLength;
     static int endLength;
     static Map<String, String[]> mapOfRules = new HashMap<>();
@@ -64,7 +64,6 @@ public class GrammarGenerator {
             currentLengthInTerminals = countOfTerminals(currentChain);
 
             boolean isNonTerminalFound = false;
-            // Левосторонний если не делать ревёрс
             for (int i = 0; i < currentChain.length(); i++) {
                 if (Character.isUpperCase(currentChain.charAt(i))) {
                     isNonTerminalFound = true;
@@ -75,9 +74,10 @@ public class GrammarGenerator {
 
             // Если найдена законченная цепочка неподходящей длины
             if (!isNonTerminalFound && (currentLengthInTerminals < startLength || currentLengthInTerminals > endLength)) {
-                stepCounter--;
-                listOfRuleChain.remove(listOfRuleChain.size() - 1);
-                return;
+                continue;
+                //stepCounter--;
+                //listOfRuleChain.remove(listOfRuleChain.size() - 1);
+                //return;
             }
             // Защита от зацикливания
             if (stepCounter > LIMIT_OF_STEPS) {
@@ -113,6 +113,9 @@ public class GrammarGenerator {
             System.err.println("Input data error!"); //e.printStackTrace();
             return;
         }*/
+
+        startLength = 0;
+        endLength = 3;
 
         Grammar parsedGrammar;
         try {
