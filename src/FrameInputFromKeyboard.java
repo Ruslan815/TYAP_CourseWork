@@ -51,13 +51,27 @@ public class FrameInputFromKeyboard extends Frame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (grammarType.equals("РГ")) {
-            String passedGrammarString = this.inputField.getText();
-            String someGrammarType = this.grammarTypeChoice.getSelectedItem();
-            FrameMain.setInputOfGrammar(passedGrammarString, someGrammarType);
-        } else {
-            String passedRegExpString = this.inputField.getText();
-            FrameMain.setInputOfRegExp(passedRegExpString);
+        switch (grammarType) {
+            case "РГ" -> {  // Счиать РГ с клавиатуры
+                String passedGrammarString = this.inputField.getText();
+                String someGrammarType = this.grammarTypeChoice.getSelectedItem();
+                FrameMain.setInputOfGrammar(passedGrammarString, someGrammarType);
+            }
+            case "РВ" -> {  // Счиать РВ с клавиатуры
+                String passedRegExpString = this.inputField.getText();
+                FrameMain.setInputOfRegExp(passedRegExpString);
+            }
+            case "путь к файлу" -> { // Считать РГ из файла
+                String passedFilenameString = this.inputField.getText();
+                FrameMain.loadGrammarFromFile(passedFilenameString);
+                break;
+            }
+            case "название файла" -> { // Сохранить историю в файл
+                String passedFilenameString = this.inputField.getText();
+                FrameMain.saveHistoryToFile(passedFilenameString);
+                break;
+            }
         }
+        dispose();
     }
 }

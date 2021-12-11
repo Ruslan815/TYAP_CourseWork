@@ -68,7 +68,7 @@ public class InputAndValidate {
 
         // System.out.println(Arrays.toString(nonTerminals));
 
-        System.out.println(Arrays.toString(grammarMembers));
+        System.out.println("Parsed grammar: " + Arrays.toString(grammarMembers));
 
         return new Grammar(terminals, nonTerminals, rules, startRule);
     }

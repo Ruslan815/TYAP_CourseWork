@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.*;
 import java.util.Arrays;
 
 public class FrameMain extends Frame implements ActionListener {
@@ -140,7 +141,7 @@ public class FrameMain extends Frame implements ActionListener {
                 FrameInputFromKeyboard inputRGFrame = new FrameInputFromKeyboard("РГ");
                 break;
             case "Файл":
-                // Диалог выбора файла
+                FrameInputFromKeyboard inputRGFromFileFrame = new FrameInputFromKeyboard("путь к файлу");
                 break;
             case "Ввод РВ":
                 FrameInputFromKeyboard inputRVFrame = new FrameInputFromKeyboard("РВ");
@@ -204,6 +205,31 @@ public class FrameMain extends Frame implements ActionListener {
 
     public static void setInputOfRegExp(String regExpString) {
         Main.someRegExp = regExpString;
+    }
+
+    public static void loadGrammarFromFile(String filename) {
+        try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
+
+            String[] everything = sb.toString().split(System.lineSeparator());
+            FrameMain.setInputOfGrammar(everything[1], everything[0]);
+
+        } catch (FileNotFoundException e) {
+            currentFrame.outputArea.setText("Файл " + filename + " не найден!"); //e.printStackTrace();
+        } catch (IOException exception) {
+            currentFrame.outputArea.setText("Ошибка чтения из файла " + filename + "!"); //exception.printStackTrace();
+        }
+    }
+
+    public static void saveHistoryToFile(String filename) {
+
     }
 
     /*public void createShowRGFrame() {
