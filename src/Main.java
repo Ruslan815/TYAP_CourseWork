@@ -1,20 +1,16 @@
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Main {
-    public static String grammarType; // L or R
     public static boolean readFromFile = false; // Read data from file or from form
 
+    public static String grammarType; // L or R
+    static Grammar parsedGrammar;
     static String someRegExp;
-
-    public static void inputDataFromFile() {
-
-    }
-
-    public static void inputDataFromForm() {
-
-    }
+    static int startLen;
+    static int endLen;
 
     public static void generateRegExpByGrammar() {
         if (grammarType.equals("L")) {
@@ -72,6 +68,39 @@ public class Main {
                 System.out.println("Расхождение в цепочке: " + str);
             }
         }*/
+    }
+
+    // Генерирует цепочки по текущей Регулярной Грамматике
+    public static void generateChainsByRG() {
+        if (parsedGrammar == null) {
+            FrameMain.currentFrame.outputArea.setText("Регулярная Грамматика не задана!");
+            return;
+        }
+
+        // Очищаем историю вывода
+        GrammarGenerator.stepCounter = 0;
+        GrammarGenerator.listOfRuleChain = new LinkedList<>();
+        GrammarGenerator.outputList = new LinkedList<>();
+        GrammarGenerator.resultList = new LinkedList<>();
+
+        GrammarGenerator.generateLanguageChains(parsedGrammar.getStartRule(), parsedGrammar.getStartRule(), 0);
+
+        List<String> generatedChains = GrammarGenerator.resultList;
+        List<List<String>> historyOfGeneration = GrammarGenerator.outputList;
+    }
+
+    // Генерирует цепочки по текущему Регулярному Выражению
+    public static void generateChainsByRV() {
+        if (someRegExp.isEmpty()) {
+            FrameMain.currentFrame.outputArea.setText("Регулярное Выражение не задано!");
+            return;
+        }
+
+        RegExpGenerator.setOutputList(new LinkedList<>()); // Очистили историю вывода
+        RegExpGenerator regExpGenerator = new RegExpGenerator();
+
+        List<String> generatedChains = regExpGenerator.solve(someRegExp, startLen, endLen);
+        List<List<String>> historyOfGeneration = RegExpGenerator.getOutputList();
     }
 
     public static void main(String[] args) {

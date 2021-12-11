@@ -10,6 +10,10 @@ public class RegExpGenerator {
         return outputList;
     }
 
+    public static void setOutputList(List<List<String>> outputList) {
+        RegExpGenerator.outputList = outputList;
+    }
+
     private List<String> klini(List<String> list, int maxLength) {
         List<String> res = new LinkedList<>();
         List<String> tmp = new LinkedList<>();

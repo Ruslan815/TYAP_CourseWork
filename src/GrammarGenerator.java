@@ -4,30 +4,27 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class GrammarGenerator {
-    // G = {acsxyz; F, S, A, K; F -> cA | yS, A -> zA | aS, S -> sS | xA | K, K -> !; F}
-
     // G = {acsxyz; S, A; S -> y | Ss | Aa, A -> c | Sx | Az; S} WORK (LLG)
     // G = {acsxyz; S, A; S -> y | Ss | A, A -> c | Sx | Az; S} WORK (LLG1 with lambda transition)
     // G = {acsxyzk; S, A; S -> y | Ss | Aa | Ak, A -> c | Sx | Az; S} WORK (LLG2 выражение в скобках в качестве терминала)
 
-
     // G = {abcdef; S, A; S -> a | bS | cA, A -> d | eS | fA; S} WORK (RLG)
     // G = {abcdefz; S, A; S -> a | bS | cA | zS, A -> d | eS | fA; S} WORK (RLG1 выражение в скобках в качестве терминала)
     // G = {abcdef; S, A; S -> a | S | cA, A -> d | eS | fA; S} WORK (RLG2 with lambda transition) сделай лимит рекурсии меньше (10)
-    // G = {abcdefghikmz; S, A, B; S -> a | bS | dB, A -> e | fS | gA, B -> i | kS | zB; S} WORK (RLG3 3 уравнения)
 
+    // G = {abcdefghikmz; S, A, B; S -> a | bS | dB, A -> e | fS | gA, B -> i | kS | zB; S} WORK (RLG3 3 уравнения)
 
     static final int LIMIT_OF_STEPS = 100;
     static String grammar = "G = {ab; S, A; S -> aA | bS, A -> aA | a; S}"; // Знак ! означает лямбду (пустой символ)
-    // private static String grammar = "G = {01; S, A; S -> 1A | 0A, A -> 1 | 0 | !; S}";
-    static String grammarType; // L, R
+    static String grammarType; // ЛЛГ, ПЛГ
     static int startLength;
     static int endLength;
     static Map<String, String[]> mapOfRules = new HashMap<>();
     static int stepCounter = 0;
     static Set<Character> nonTerminalsSet;
     static List<String> listOfRuleChain = new LinkedList<>();
-    // private static final char[] notAllowedCharacters = {'!'};
+    static List<List<String>> outputList = new LinkedList<>();
+    static List<String> resultList = new LinkedList<>();
 
     public static void generateLanguageChains(String currentNonTerminal, String currentChain, int currentLengthInTerminals) {
         // System.out.println(stepCounter);
@@ -52,8 +49,10 @@ public class GrammarGenerator {
             }
             if (!isNonTerminalExistInChain) {
                 currentChain = currentChain.replaceAll("!", "");
-                System.out.println(currentChain);
-                System.out.println(listOfRuleChain);
+                //System.out.println(currentChain);
+                resultList.add(currentChain); // TODO Отображать выведенную цепочку в форме
+                //System.out.println(listOfRuleChain);
+                outputList.add(listOfRuleChain); // TODO Отображать историю вывода в форме
                 stepCounter--;
                 listOfRuleChain.remove(listOfRuleChain.size() - 1);
                 return;
