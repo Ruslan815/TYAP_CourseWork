@@ -1,7 +1,5 @@
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Main {
     public static boolean readFromFile = false; // Read data from file or from form
@@ -12,13 +10,23 @@ public class Main {
     static int startLen;
     static int endLen;
 
+    static String[] nonTerminals;
+    static String[][] matrix;
+
     static boolean isGrammarCorrect = false; // На случай если произошла ошибка при парсинге
 
     static StringBuilder historyOfAll = new StringBuilder();
 
     public static void generateRegExpByGrammar() {
-        if (grammarType.equals("L")) {
-            // Преобразовали в ПЛ
+        if (!isGrammarCorrect) {
+            FrameMain.currentFrame.outputArea.setText("Регулярная Грамматика не задана!");
+            return;
+        }
+
+        convertGrammarToMatrix();
+
+        if (grammarType.equals("ЛЛГ")) {
+            // Преобразовали в ПЛГ
             String[][] systemOfGrammar = null; // Заполнить систему уравнений
             ConvertLLGtoRLG converter = new ConvertLLGtoRLG(systemOfGrammar);
         }
@@ -41,44 +49,88 @@ public class Main {
         // Берём полученное регулярное выражение для целевого символа S
         String resultRegExp = SLAU.result[0];
 
-        // Генерируем цепочки по регулярному выражению
-        RegExpGenerator generator = new RegExpGenerator();
-        List<String> generatedRegExp = generator.solve(resultRegExp, 0, 3);
+        // Генерируем цепочки по РГ и РВ
+        List<String> generatedChainsOfRG = generateChainsByRG();
+        List<String> generatedChainsOfRV = generateChainsByRV();
 
-        // Генерируем цепочки по регулярной грамматике
-        try {
-            InputAndValidate.inputData();
-        } catch (IOException e) {
-            System.err.println("Input data error!"); //e.printStackTrace();
-            return;
-        }
-
-        Grammar parsedGrammar;
-        try {
-            parsedGrammar = InputAndValidate.parseGrammar();
-            System.out.println(parsedGrammar);
-        } catch (Exception e) {
-            System.err.println("Grammar parsing Exception!"); //e.printStackTrace();
-            return;
-        }
-        System.out.println("Grammar after parsing:\n" + parsedGrammar);
-
-        InputAndValidate.fillMapOfRules(parsedGrammar.getNonTerminals(), parsedGrammar.getRules()); //displayMapOfRules();
-        GrammarGenerator.generateLanguageChains(parsedGrammar.getStartRule(), parsedGrammar.getStartRule(), 0);
-
-        // Записываем результат генерации обоих генераторов и сравниваем их
-        /*for (String str: resultList1) {
-            if (!resultList2.contains(str)) {
-                System.out.println("Расхождение в цепочке: " + str);
+        // Проверяем на совпадение цепочки из РГ в РВ
+        for (String tempChain : generatedChainsOfRG) {
+            if (!generatedChainsOfRV.contains(tempChain)) {
+                FrameMain.currentFrame.outputArea.setText("Цепочки не совпали.\nРегулярная грамматика вывела цепочку: " + tempChain);
+                return;
             }
-        }*/
+        }
+
+        // Проверяем на совпадение цепочки из РВ в РГ
+        for (String tempChain : generatedChainsOfRV) {
+            if (!generatedChainsOfRG.contains(tempChain)) {
+                FrameMain.currentFrame.outputArea.setText("Цепочки не совпали.\nРегулярное выражение вывело цепочку: " + tempChain);
+                return;
+            }
+        }
+
+        // Если цепочки совпали
+        FrameMain.currentFrame.outputArea.setText("Цепочки совпали.");
+    }
+
+    private static void convertGrammarToMatrix() {
+        Set<String> setOfNT = GrammarGenerator.mapOfRules.keySet();
+        List<String> listOfNT = new LinkedList<>(setOfNT);
+        Map<String, String[]> mapOfRules = new HashMap<>(Map.copyOf(GrammarGenerator.mapOfRules));
+
+        // Создаём массив с номерами нетерминалов и их названиями
+        nonTerminals = new String[mapOfRules.size() + 1]; // Плюс пустая нулевая строка
+        Arrays.fill(nonTerminals, "");
+        nonTerminals[1] = "S";
+        for (int i = 2; i < nonTerminals.length; i++) {
+            nonTerminals[i] = String.valueOf(Character.toChars('A' + (i - 2)));
+        }
+
+        int indexOfNT = 2; // Начинаем с NT = "A"
+
+        // Проходимся по всем NT и меняем их названия на порядковые
+        for (String someNT : listOfNT) {
+            if (someNT.equals("S")) continue;
+
+            String newCurrentNT = nonTerminals[indexOfNT++]; // Берём новый текущий NT
+
+            // Проходимся по всем NT
+            for (String currNT : listOfNT) {
+                // Проходимся по всем правилам текущего NT и меняем someNT на порядковый NT (A, B, C, ...)
+                String[] currentRules = mapOfRules.get(currNT); // Получаем все правила для текущего NT
+                for (int i = 0; i < currentRules.length; i++) {
+                    if (currentRules[i].contains(someNT)) { // Если правило содержит текущий NT, то заменяем его на порядковый
+                        currentRules[i] = currentRules[i].replace(someNT, newCurrentNT);
+                    }
+                }
+                mapOfRules.put(currNT, currentRules); // Записываем новые правила
+            }
+
+            // И меняем название самомого NT в мапе
+            String[] currentRules = mapOfRules.get(someNT);
+            mapOfRules.remove(someNT);
+            mapOfRules.put(newCurrentNT, currentRules);
+        }
+
+        matrix = new String[nonTerminals.length][nonTerminals.length];
+
+        for (String[] row: matrix) // Заполняем матрицу пустотой
+            Arrays.fill(row, "");
+
+        // Формируем матрицу уравнений
+        for (int i = 1; i < nonTerminals.length; i++) {
+            String currentNT = nonTerminals[i]; // Выбираем текущую строку
+
+            // Считаем коэффициенты для столбца свободных членов
+            // Считаем коэффициенты для каждого столца нетерминала если он есть
+        }
     }
 
     // Генерирует цепочки по текущей Регулярной Грамматике
-    public static void generateChainsByRG() {
+    public static List<String> generateChainsByRG() {
         if (!isGrammarCorrect) {
             FrameMain.currentFrame.outputArea.setText("Регулярная Грамматика не задана!");
-            return;
+            return null;
         }
 
         // Очищаем историю вывода
@@ -94,7 +146,7 @@ public class Main {
         List<List<String>> historyOfGeneration = GrammarGenerator.outputHistoryList;
 
         // Выводим результаты генерации в форму
-        StringBuilder outputAreaText = new StringBuilder("Сегенрированные цепочки:\n" + generatedChains + "\nПроцесс вывода цепочек:\n");
+        StringBuilder outputAreaText = new StringBuilder("Регулярная грамматика\nСгенерированные цепочки:\n" + generatedChains + "\nПроцесс вывода цепочек:\n");
         for (List<String> list : historyOfGeneration) {
             outputAreaText.append(list).append("\n");
         }
@@ -102,13 +154,15 @@ public class Main {
 
         // Записываем результаты генерации в историю
         historyOfAll.append(outputAreaText).append("\n\n");
+
+        return generatedChains;
     }
 
     // Генерирует цепочки по текущему Регулярному Выражению
-    public static void generateChainsByRV() {
+    public static List<String> generateChainsByRV() {
         if (someRegExp == null || someRegExp.isEmpty()) {
             FrameMain.currentFrame.outputArea.setText("Регулярное Выражение не задано!");
-            return;
+            return null;
         }
 
         // Очищаем историю вывода
@@ -120,7 +174,7 @@ public class Main {
         List<List<String>> historyOfGeneration = RegExpGenerator.getOutputList();
 
         // Выводим результаты генерации в форму
-        StringBuilder outputAreaText = new StringBuilder("Сегенрированные цепочки:\n" + generatedChains + "\nПроцесс вывода цепочек:\n");
+        StringBuilder outputAreaText = new StringBuilder("Регулярное выражение\nСгенерированные цепочки:\n" + generatedChains + "\nПроцесс вывода цепочек:\n");
         for (List<String> list : historyOfGeneration) {
             outputAreaText.append(list).append("\n");
         }
@@ -128,6 +182,8 @@ public class Main {
 
         // Записываем результаты генерации в историю
         historyOfAll.append(outputAreaText).append("\n\n");
+
+        return generatedChains;
     }
 
     public static void main(String[] args) {

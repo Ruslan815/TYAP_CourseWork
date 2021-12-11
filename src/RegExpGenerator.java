@@ -138,27 +138,6 @@ public class RegExpGenerator {
 
     public static void main(String[] args) {
         RegExpGenerator generator = new RegExpGenerator();
-        /*List<String> list1 = generator.solve("(y+((c+ys*x)(as*x+z)*)a)(s)*",0, 4);
-        List<String> list2 = generator.solve("((c((z)*(a(xz*a+s)*)))+(y(xz*a+s)*))",0, 4);
-        for (String str1 : list1) {
-            System.out.print(str1 + " : ");
-            if (!list2.contains(str1)) {
-                System.out.print("NO");
-            }
-            System.out.println();
-        }
-
-        System.out.println("\n");
-        for (String str2 : list2) {
-            System.out.print(str2 + " : ");
-            if (!list1.contains(str2)) {
-                System.out.print("NO");
-            }
-            System.out.println();
-        }
-        System.out.println();
-        System.out.println(); // "(b*(a+c(eb*c+f)*(d+eb*a)))" // (g+fb*c)* // (a+b)* // (y+((c+ys*x)(as*x+z)*)a)(s)**/
-
         //System.out.println(generator.solve("(y((s)*(!+x((z+a(s)*x)*(a(s)*!))))+c((z+a(s)*x)*(a(s)*!)))", 0, 3));
         //System.out.println(generator.solve("(y+y((s)*(s+x((z+a(s)*x)*(a+a(s)*s))))+c((z+a(s)*x)*(a+a(s)*s)))", 0, 4));
         //System.out.println(generator.solve("(y+c+y((s)*(s+x+x((z+(s)*x)*(z+(s)*s+(s)*x))))+c((z+(s)*x)*(z+(s)*s+(s)*x)))", 0, 3));

@@ -212,7 +212,7 @@ public class FrameMain extends Frame implements ActionListener {
                 }
 
                 // Если диапазон корретный, то переходим к генерации
-                // TODO Генерация
+                Main.generateRegExpByGrammar();
                 break;
             case "Сгенерировать по РГ":
                 // Проверяем введённый диапазон длин цепочек
@@ -304,63 +304,6 @@ public class FrameMain extends Frame implements ActionListener {
             currentFrame.outputArea.setText("Ошибка записи истории в файл " + filename + "!"); //e.printStackTrace();
         }
     }
-
-    /*public void createShowRGFrame() {
-        Frame infoFrame = new Frame();
-        TextArea infoTextArea = new TextArea();
-        StringBuilder infoStringBuilder = new StringBuilder();
-        infoStringBuilder.append("Начальное состояние: ").append(Lab4.MPP_Grammar.getStartState()).append("\n");
-        infoStringBuilder.append("Множество конечных состояний: ").append(Arrays.toString(Lab4.MPP_Grammar.getEndStates())).append("\n");
-        for (String[] rows : Lab4.MPP_transitionFunction) {
-            for (int i = 0; i < 5; i++) {
-                String element = rows[i];
-                if (i == 2) {
-                    infoStringBuilder.append(element).append(" -> ");
-                } else if (i != 4) {
-                    infoStringBuilder.append(element).append(", ");
-                } else {
-                    infoStringBuilder.append(element);
-                }
-            }
-            infoStringBuilder.append("\n");
-        }
-        infoTextArea.setText(infoStringBuilder.toString());
-        infoFrame.setForeground(new Color(0x6F0AA1));
-        infoFrame.add(infoTextArea);
-        infoFrame.setBounds(600, 250, 600, 390);
-        infoFrame.setTitle("Текущий МПП");
-        infoFrame.setVisible(true);
-        infoFrame.addWindowListener(
-                new WindowAdapter() {
-                    public void windowClosing(WindowEvent we) {
-                        infoFrame.dispose();
-                    }
-                }
-        );
-    }
-
-    public void displayHistory() {
-        Frame infoFrame = new Frame();
-        TextArea infoTextArea = new TextArea();
-        StringBuilder infoStringBuilder = new StringBuilder();
-        infoStringBuilder.append("История генерации цепочек:\n");
-        for (int i = 0; i < Lab4.outputHistory.size(); i++) {
-            infoStringBuilder.append(i).append(") ").append(Lab4.outputHistory.get(i)).append("\n");
-        }
-        infoTextArea.setText(infoStringBuilder.toString());
-        infoFrame.setForeground(new Color(0x6F0AA1));
-        infoFrame.add(infoTextArea);
-        infoFrame.setBounds(600, 250, 600, 390);
-        infoFrame.setTitle("История");
-        infoFrame.setVisible(true);
-        infoFrame.addWindowListener(
-                new WindowAdapter() {
-                    public void windowClosing(WindowEvent we) {
-                        infoFrame.dispose();
-                    }
-                }
-        );
-    }*/
 
     public void createTextFrame(String title, String someText) {
         Frame infoFrame = new Frame();
