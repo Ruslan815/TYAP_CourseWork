@@ -4,7 +4,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class FrameMain extends Frame implements ActionListener {
 
@@ -150,7 +156,7 @@ public class FrameMain extends Frame implements ActionListener {
                 createTextFrame("История", "Я история");
                 break;
             case "Записать историю в файл":
-                // Получить всю историю и записать в файл history.txt
+                FrameInputFromKeyboard saveHistoryToFileFrame = new FrameInputFromKeyboard("название файла");
                 break;
             case "Справка":
                 createTextFrame("Справка", """
@@ -229,7 +235,14 @@ public class FrameMain extends Frame implements ActionListener {
     }
 
     public static void saveHistoryToFile(String filename) {
-
+        List<String> list = new LinkedList<>();
+        list.add("History of history");
+        Path file = Paths.get(filename);
+        try {
+            Files.write(file, list, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            currentFrame.outputArea.setText("Ошибка записи истории в файл " + filename + "!"); //e.printStackTrace();
+        }
     }
 
     /*public void createShowRGFrame() {

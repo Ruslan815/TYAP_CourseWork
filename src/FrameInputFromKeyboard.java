@@ -64,12 +64,10 @@ public class FrameInputFromKeyboard extends Frame implements ActionListener {
             case "путь к файлу" -> { // Считать РГ из файла
                 String passedFilenameString = this.inputField.getText();
                 FrameMain.loadGrammarFromFile(passedFilenameString);
-                break;
             }
             case "название файла" -> { // Сохранить историю в файл
                 String passedFilenameString = this.inputField.getText();
                 FrameMain.saveHistoryToFile(passedFilenameString);
-                break;
             }
         }
         dispose();
