@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
 
 public class GrammarGenerator {
@@ -16,14 +14,13 @@ public class GrammarGenerator {
 
     static final int LIMIT_OF_STEPS = 100;
     static String grammar = "G = {ab; S, A; S -> aA | bS, A -> aA | a; S}"; // Знак ! означает лямбду (пустой символ)
-    static String grammarType; // ЛЛГ, ПЛГ
     static int startLength;
     static int endLength;
     static Map<String, String[]> mapOfRules = new HashMap<>();
     static int stepCounter = 0;
     static Set<Character> nonTerminalsSet;
     static List<String> listOfRuleChain = new LinkedList<>();
-    static List<List<String>> outputList = new LinkedList<>();
+    static List<List<String>> outputHistoryList = new LinkedList<>();
     static List<String> resultList = new LinkedList<>();
 
     public static void generateLanguageChains(String currentNonTerminal, String currentChain, int currentLengthInTerminals) {
@@ -52,7 +49,7 @@ public class GrammarGenerator {
                 //System.out.println(currentChain);
                 resultList.add(currentChain); // TODO Отображать выведенную цепочку в форме
                 //System.out.println(listOfRuleChain);
-                outputList.add(listOfRuleChain); // TODO Отображать историю вывода в форме
+                outputHistoryList.add(List.copyOf(listOfRuleChain)); // TODO Отображать историю вывода в форме
                 stepCounter--;
                 listOfRuleChain.remove(listOfRuleChain.size() - 1);
                 return;
@@ -127,14 +124,21 @@ public class GrammarGenerator {
         Grammar parsedGrammar;
         try {
             parsedGrammar = InputAndValidate.parseGrammar();
-            System.out.println(parsedGrammar);
+            //System.out.println(parsedGrammar);
         } catch (Exception e) {
             System.err.println("Grammar parsing Exception!"); //e.printStackTrace();
             return;
         }
-        System.out.println("Grammar after parsing:\n" + parsedGrammar);
+        //System.out.println("Grammar after parsing:\n" + parsedGrammar);
 
         InputAndValidate.fillMapOfRules(parsedGrammar.getNonTerminals(), parsedGrammar.getRules()); //displayMapOfRules();
         generateLanguageChains(parsedGrammar.getStartRule(), parsedGrammar.getStartRule(), 0);
+
+        System.out.println("History:");
+        for (List<String> list : outputHistoryList) {
+            System.out.println(list);
+        }
+        System.out.println("Result:");
+        System.out.println(resultList);
     }
 }

@@ -55,6 +55,8 @@ public class FrameMain extends Frame implements ActionListener {
         this.setBackground(new Color(0x4EC25A));
         this.setForeground(new Color(0x2626CC));
 
+        outputArea.setFont(new Font("Arial", Font.PLAIN, 16));
+
         mainGenerationButton.addActionListener(this);
         rgGenerationButton.addActionListener(this);
         rvGenerationButton.addActionListener(this);
@@ -76,7 +78,7 @@ public class FrameMain extends Frame implements ActionListener {
 
         this.setResizable(false);
         this.setBounds(600, 250, 700, 550);
-        this.setTitle("Курсовая работа ТЯПиМТ");
+        this.setTitle("Курсовая работа ТЯПиМТ 12 Вариант by Ruslan815");
         this.setLayout(null);
         this.setVisible(true);
 
@@ -153,7 +155,7 @@ public class FrameMain extends Frame implements ActionListener {
                 FrameInputFromKeyboard inputRVFrame = new FrameInputFromKeyboard("РВ");
                 break;
             case "История":
-                createTextFrame("История", "Я история");
+                createTextFrame("История", Main.historyOfAll.toString());
                 break;
             case "Записать историю в файл":
                 FrameInputFromKeyboard saveHistoryToFileFrame = new FrameInputFromKeyboard("название файла");
@@ -180,16 +182,71 @@ public class FrameMain extends Frame implements ActionListener {
                         таким образом: (a)*""");
                 break;
             case "Показать РГ":
-                createTextFrame("Текущая РГ", "Я РГ");
+                // Если грамматика задана
+                if (Main.parsedGrammar != null && Main.isGrammarCorrect) {
+                    createTextFrame("Текущая РГ", Main.parsedGrammar.toString());
+                } else {
+                    createTextFrame("Текущая РГ", "Регулярная Грамматика не задана");
+                }
                 break;
             case "Показать РВ":
-                createTextFrame("Текущее РВ", "Я РВ");
+                if (Main.someRegExp != null) {
+                    createTextFrame("Текущее РВ", Main.someRegExp);
+                } else {
+                    createTextFrame("Текущее РВ", "Регулярное Выражение не задано");
+                }
                 break;
             case "Сгенерировать РВ по РГ и проверить":
+                // Проверяем введённый диапазон длин цепочек
+                try {
+                    int startLen = Integer.parseInt(currentFrame.fromField.getText());
+                    int endLen = Integer.parseInt(currentFrame.toField.getText());
+                    if (startLen < 0 || endLen < 0 || startLen > endLen) throw new NumberFormatException();
+                    GrammarGenerator.startLength = startLen;
+                    GrammarGenerator.endLength = endLen;
+                    Main.startLen = startLen;
+                    Main.endLen = endLen;
+                } catch (NumberFormatException exception) {
+                    currentFrame.outputArea.setText("Введён некорректный диапазон длин цепочек!");
+                    return;
+                }
+
+                // Если диапазон корретный, то переходим к генерации
+                // TODO Генерация
                 break;
             case "Сгенерировать по РГ":
+                // Проверяем введённый диапазон длин цепочек
+                try {
+                    int startLen = Integer.parseInt(currentFrame.fromField.getText());
+                    int endLen = Integer.parseInt(currentFrame.toField.getText());
+                    if (startLen < 0 || endLen < 0 || startLen > endLen) throw new NumberFormatException();
+                    GrammarGenerator.startLength = startLen;
+                    GrammarGenerator.endLength = endLen;
+                    Main.startLen = startLen;
+                    Main.endLen = endLen;
+                } catch (NumberFormatException exception) {
+                    currentFrame.outputArea.setText("Введён некорректный диапазон длин цепочек!");
+                    return;
+                }
+
+                // Если диапазон корретный, то переходим к генерации
+                Main.generateChainsByRG();
                 break;
             case "Сгенерировать по РВ":
+                // Проверяем введённый диапазон длин цепочек
+                try {
+                    int startLen = Integer.parseInt(currentFrame.fromField.getText());
+                    int endLen = Integer.parseInt(currentFrame.toField.getText());
+                    if (startLen < 0 || endLen < 0 || startLen > endLen) throw new NumberFormatException();
+                    Main.startLen = startLen;
+                    Main.endLen = endLen;
+                } catch (NumberFormatException exception) {
+                    currentFrame.outputArea.setText("Введён некорректный диапазон длин цепочек!");
+                    return;
+                }
+
+                // Если диапазон корретный, то переходим к генерации
+                Main.generateChainsByRV();
                 break;
             default:
                 System.err.println("Неизвестное событие");
@@ -197,16 +254,19 @@ public class FrameMain extends Frame implements ActionListener {
     }
 
     public static void setInputOfGrammar(String inputOfGrammar, String grammarType) {
-        GrammarGenerator.grammar = inputOfGrammar;
-        GrammarGenerator.grammarType = grammarType;
         Grammar parsedGrammar;
         try {
+            GrammarGenerator.grammar = inputOfGrammar;
             parsedGrammar = InputAndValidate.parseGrammar();
         } catch (Exception someException) {
-            currentFrame.outputArea.setText("Grammar parsing Exception!");
+            Main.isGrammarCorrect = false;
+            currentFrame.outputArea.setText("Ошибка парсинга грамматики! Неверный формат!\n" + someException.getMessage());
             return;
         }
         InputAndValidate.fillMapOfRules(parsedGrammar.getNonTerminals(), parsedGrammar.getRules());
+        Main.parsedGrammar = parsedGrammar;
+        Main.grammarType = grammarType;
+        Main.isGrammarCorrect = true;
     }
 
     public static void setInputOfRegExp(String regExpString) {
@@ -236,7 +296,7 @@ public class FrameMain extends Frame implements ActionListener {
 
     public static void saveHistoryToFile(String filename) {
         List<String> list = new LinkedList<>();
-        list.add("History of history");
+        list.add(Main.historyOfAll.toString());
         Path file = Paths.get(filename);
         try {
             Files.write(file, list, StandardCharsets.UTF_8);

@@ -24,18 +24,6 @@ public class InputAndValidate {
             throw new IOException();
         }
 
-        System.out.print("Введите тип регулярной грамматики (Леволинейная - L, Праволинейная - R): ");
-        String outputTypeStr = scanner.next();
-        // System.out.println(outputTypeStr);
-        if (!outputTypeStr.equals("L") && !outputTypeStr.equals("R")) {
-            System.err.println("Wrong type of output grammar type!");
-            throw new IOException();
-        } else if (outputTypeStr.equals("L")) {
-            GrammarGenerator.grammarType = "L";
-        } else {
-            GrammarGenerator.grammarType = "R";
-        }
-
         System.out.print("Введите диапазон длин генерируемых цепочек (start end): ");
         GrammarGenerator.startLength = scanner.nextInt();
         GrammarGenerator.endLength = scanner.nextInt();
@@ -68,7 +56,7 @@ public class InputAndValidate {
 
         // System.out.println(Arrays.toString(nonTerminals));
 
-        System.out.println("Parsed grammar: " + Arrays.toString(grammarMembers));
+        //System.out.println("Parsed grammar: " + Arrays.toString(grammarMembers));
 
         return new Grammar(terminals, nonTerminals, rules, startRule);
     }

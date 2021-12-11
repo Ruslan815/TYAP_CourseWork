@@ -12,6 +12,10 @@ public class Main {
     static int startLen;
     static int endLen;
 
+    static boolean isGrammarCorrect = false; // На случай если произошла ошибка при парсинге
+
+    static StringBuilder historyOfAll = new StringBuilder();
+
     public static void generateRegExpByGrammar() {
         if (grammarType.equals("L")) {
             // Преобразовали в ПЛ
@@ -72,7 +76,7 @@ public class Main {
 
     // Генерирует цепочки по текущей Регулярной Грамматике
     public static void generateChainsByRG() {
-        if (parsedGrammar == null) {
+        if (!isGrammarCorrect) {
             FrameMain.currentFrame.outputArea.setText("Регулярная Грамматика не задана!");
             return;
         }
@@ -80,27 +84,50 @@ public class Main {
         // Очищаем историю вывода
         GrammarGenerator.stepCounter = 0;
         GrammarGenerator.listOfRuleChain = new LinkedList<>();
-        GrammarGenerator.outputList = new LinkedList<>();
+        GrammarGenerator.outputHistoryList = new LinkedList<>();
         GrammarGenerator.resultList = new LinkedList<>();
 
+        // Генерируем
         GrammarGenerator.generateLanguageChains(parsedGrammar.getStartRule(), parsedGrammar.getStartRule(), 0);
 
         List<String> generatedChains = GrammarGenerator.resultList;
-        List<List<String>> historyOfGeneration = GrammarGenerator.outputList;
+        List<List<String>> historyOfGeneration = GrammarGenerator.outputHistoryList;
+
+        // Выводим результаты генерации в форму
+        StringBuilder outputAreaText = new StringBuilder("Сегенрированные цепочки:\n" + generatedChains + "\nПроцесс вывода цепочек:\n");
+        for (List<String> list : historyOfGeneration) {
+            outputAreaText.append(list).append("\n");
+        }
+        FrameMain.currentFrame.outputArea.setText(outputAreaText.toString());
+
+        // Записываем результаты генерации в историю
+        historyOfAll.append(outputAreaText).append("\n\n");
     }
 
     // Генерирует цепочки по текущему Регулярному Выражению
     public static void generateChainsByRV() {
-        if (someRegExp.isEmpty()) {
+        if (someRegExp == null || someRegExp.isEmpty()) {
             FrameMain.currentFrame.outputArea.setText("Регулярное Выражение не задано!");
             return;
         }
 
-        RegExpGenerator.setOutputList(new LinkedList<>()); // Очистили историю вывода
+        // Очищаем историю вывода
+        RegExpGenerator.setOutputList(new LinkedList<>());
         RegExpGenerator regExpGenerator = new RegExpGenerator();
 
+        // Генерируем
         List<String> generatedChains = regExpGenerator.solve(someRegExp, startLen, endLen);
         List<List<String>> historyOfGeneration = RegExpGenerator.getOutputList();
+
+        // Выводим результаты генерации в форму
+        StringBuilder outputAreaText = new StringBuilder("Сегенрированные цепочки:\n" + generatedChains + "\nПроцесс вывода цепочек:\n");
+        for (List<String> list : historyOfGeneration) {
+            outputAreaText.append(list).append("\n");
+        }
+        FrameMain.currentFrame.outputArea.setText(outputAreaText.toString());
+
+        // Записываем результаты генерации в историю
+        historyOfAll.append(outputAreaText).append("\n\n");
     }
 
     public static void main(String[] args) {
