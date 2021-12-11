@@ -45,7 +45,7 @@ public class ExpressionParser {
                         tempResultList = Combined(tempResultList, recursion(substr.substring(i + 1, i + indexOfClosetBracet)));
                     }
                     i += indexOfClosetBracet;
-                } else if (Character.isLetter(substr.charAt(i))) // Если встретили символ алфавита
+                } else if (Character.isLetter(substr.charAt(i)) || Character.isDigit(substr.charAt(i))) // Если встретили символ алфавита
                 {
                     if (i + 1 < substr.length() && substr.charAt(i + 1) == '*') // И после него стоит звёздочка
                     {
@@ -117,7 +117,7 @@ public class ExpressionParser {
     // Only for RL Grammar
     public static void main(String[] args) {
         ExpressionParser parser = new ExpressionParser();
-        for (String str: parser.solve("(d)*(a+b+c)")) { // (a+b)(c+d) // (za*k(b+cD)) // (b*(a+cA+dB)) // (f(b*(a+cA+dB))) // ((g+fb*c)*(e+fb*a+fb*dB+hB)) // (k(b*(a+c((g+fb*c)*(e+fb*a+fb*dB+hB))+dB))) // (m((g+fb*c)*(e+fb*a+fb*dB+hB))) //
+        for (String str: parser.solve("(b)*(2+a+4)")) { // (a+b)(c+d) // (za*k(b+cD)) // (b*(a+cA+dB)) // (f(b*(a+cA+dB))) // ((g+fb*c)*(e+fb*a+fb*dB+hB)) // (k(b*(a+c((g+fb*c)*(e+fb*a+fb*dB+hB))+dB))) // (m((g+fb*c)*(e+fb*a+fb*dB+hB))) //
             System.out.println(str);
         }
     }
