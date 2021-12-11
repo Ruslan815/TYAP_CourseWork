@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -146,18 +147,22 @@ public class FrameMain extends Frame implements ActionListener {
                         должна выдаваться диагностика различий – где именно несовпадения и в чём они состоят.""");
                 break;
             case "Клавиатура":
+                currentFrame.outputArea.setText("");
                 FrameInputFromKeyboard inputRGFrame = new FrameInputFromKeyboard("РГ");
                 break;
             case "Файл":
+                currentFrame.outputArea.setText("");
                 FrameInputFromKeyboard inputRGFromFileFrame = new FrameInputFromKeyboard("путь к файлу");
                 break;
             case "Ввод РВ":
+                currentFrame.outputArea.setText("");
                 FrameInputFromKeyboard inputRVFrame = new FrameInputFromKeyboard("РВ");
                 break;
             case "История":
                 createTextFrame("История", Main.historyOfAll.toString());
                 break;
             case "Записать историю в файл":
+                currentFrame.outputArea.setText("");
                 FrameInputFromKeyboard saveHistoryToFileFrame = new FrameInputFromKeyboard("название файла");
                 break;
             case "Справка":
@@ -190,6 +195,7 @@ public class FrameMain extends Frame implements ActionListener {
                 }
                 break;
             case "Показать РВ":
+                // Если Регулярное выражение задано
                 if (Main.someRegExp != null) {
                     createTextFrame("Текущее РВ", Main.someRegExp);
                 } else {
@@ -197,6 +203,7 @@ public class FrameMain extends Frame implements ActionListener {
                 }
                 break;
             case "Сгенерировать РВ по РГ и проверить":
+                currentFrame.outputArea.setText("");
                 // Проверяем введённый диапазон длин цепочек
                 try {
                     int startLen = Integer.parseInt(currentFrame.fromField.getText());
@@ -215,6 +222,7 @@ public class FrameMain extends Frame implements ActionListener {
                 Main.generateRegExpByGrammar();
                 break;
             case "Сгенерировать по РГ":
+                currentFrame.outputArea.setText("");
                 // Проверяем введённый диапазон длин цепочек
                 try {
                     int startLen = Integer.parseInt(currentFrame.fromField.getText());
@@ -233,6 +241,7 @@ public class FrameMain extends Frame implements ActionListener {
                 Main.generateChainsByRG();
                 break;
             case "Сгенерировать по РВ":
+                currentFrame.outputArea.setText("");
                 // Проверяем введённый диапазон длин цепочек
                 try {
                     int startLen = Integer.parseInt(currentFrame.fromField.getText());
@@ -325,6 +334,6 @@ public class FrameMain extends Frame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        FrameMain frameMain = new FrameMain();
+        new FrameMain();
     }
 }

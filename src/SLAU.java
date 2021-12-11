@@ -95,45 +95,22 @@ public class SLAU {
                 }
             }
         }
+        //System.out.println("SLAU: RESULT: " + Arrays.toString(result));
     }
 
     public static void main(String[] args) {
-        String[][] LLG = {
-                {"", "", ""},
-                {"y", "Ss", "Aa"},
-                {"c", "Sx", "Az"}
-        };
-
-        String[][] LLG1 = {
-                {"", "", ""},
-                {"y", "Ss", "A"},
-                {"c", "Sx", "Az"}
-        };
-
-        String[][] LLG2 = {
+        /*String[][] LLG2 = {
                 {"", "", ""},
                 {"y", "Ss", "A(a+k)"},
                 {"c", "Sx", "Az"}
         };
 
-        /*
+
         ConvertLLGtoRLG converter = new ConvertLLGtoRLG(LLG);
         nonTerminals = converter.getNonTerminals();
         matrix = converter.getResult();
         result = new String[matrix.length];
         Arrays.fill(result, "");*/
-
-        String[][] RLG = {
-                {"", "", ""},
-                {"a", "bA", "cB"},
-                {"d", "eA", "fB"}
-        };
-
-        String[][] RLG1 = {
-                {"", "", ""},
-                {"a", "(b+z)A", "cB"},
-                {"d", "eA", "fB"}
-        };
 
         String[][] RLG2 = {
                 {"", "", ""},
@@ -141,22 +118,8 @@ public class SLAU {
                 {"d", "eA", "fB"}
         };
 
-        String[][] RLG3 = {
-                {"", "", "", ""},
-                {"a", "bS", "", "dB"},
-                {"e", "fS", "gA", ""},
-                {"i", "kS", "", "zB"},
-        };
-
-        /*String[][] RLG4 = {
-                {"", "", "", ""},
-                {"a", "bS", "", "dB"},
-                {"e", "fS", "gA", ""},
-                {"i", "", "kA", "zB"},
-        };*/
-
         nonTerminals = new String[]{"", "S", "A", "B"};
-        matrix = RLG3;
+        matrix = RLG2;
         result = new String[matrix.length];
         Arrays.fill(result, "");
 

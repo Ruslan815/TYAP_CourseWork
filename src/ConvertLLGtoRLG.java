@@ -39,13 +39,13 @@ public class ConvertLLGtoRLG {
         matrix[1][0] = "!"; // Выход из целевого(изначального, теперь финального) символа по лямбде
 
         // Выводим
-        System.out.println("TRANSPOSED");
+        /*System.out.println("TRANSPOSED");
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
                 System.out.print(matrix[i][j] + " ");
             }
             System.out.println();
-        }
+        }*/
 
         // Создаём результирующую ПЛ грамматику
         String[][] newRLG = new String[matrix.length][matrix.length];
@@ -106,13 +106,13 @@ public class ConvertLLGtoRLG {
         }
 
         // Выводим
-        System.out.println("RESULT");
+        /*System.out.println("RESULT");
         for (int i = 0; i < newRLG.length; i++) {
             for (int j = 0; j < newRLG[0].length; j++) {
                 System.out.print(newRLG[i][j] + " ");
             }
             System.out.println();
-        }
+        }*/
 
         result = newRLG;
     }

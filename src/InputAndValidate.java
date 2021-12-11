@@ -7,35 +7,6 @@ import java.util.Scanner;
 import java.util.TreeSet;
 
 public class InputAndValidate {
-    public static void inputData() throws IOException {
-        Scanner scanner = new Scanner(System.in);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
-        System.out.print("Если вы хотите использовать грамматику ПО УМОЛЧАНИЮ введите цифру 0, \n" +
-                "если вы хотите ввести СВОЮ грамматику введите цифру 1: ");
-        int isUserGrammar = scanner.nextInt();
-        if (isUserGrammar == 1) {
-            System.out.println("Введите грамматику (G = {\"\"; [ , ]; [ , ]; \"\"}): ");
-            GrammarGenerator.grammar = reader.readLine();
-            // grammar = scanner.next();
-            // System.out.println(inputStr);
-        } else if (isUserGrammar != 0) {
-            System.err.println("Wrong type of input grammar mode!");
-            throw new IOException();
-        }
-
-        System.out.print("Введите диапазон длин генерируемых цепочек (start end): ");
-        GrammarGenerator.startLength = scanner.nextInt();
-        GrammarGenerator.endLength = scanner.nextInt();
-        if (GrammarGenerator.startLength < 0 || GrammarGenerator.endLength < 0 || GrammarGenerator.startLength > GrammarGenerator.endLength) {
-            System.err.println("Invalid range of generate sequences length!");
-            throw new IOException();
-        }
-        //System.out.println("Start && end: " + startLength + " && " + endLength);
-
-        scanner.close();
-    }
-
     public static Grammar parseGrammar() throws Exception {
         GrammarGenerator.grammar = GrammarGenerator.grammar.replace(" ", "");
         GrammarGenerator.grammar = GrammarGenerator.grammar.replace("{", "");
@@ -55,7 +26,6 @@ public class InputAndValidate {
         validateRules(rules, terminals, nonTerminals);
 
         // System.out.println(Arrays.toString(nonTerminals));
-
         //System.out.println("Parsed grammar: " + Arrays.toString(grammarMembers));
 
         return new Grammar(terminals, nonTerminals, rules, startRule);
@@ -197,6 +167,7 @@ public class InputAndValidate {
      * Заполняем мапу правил: Map<NonTerminal, Rules[]>
      */
     public static void fillMapOfRules(String[] nonTerminals, String[] rules) {
+        GrammarGenerator.mapOfRules.clear(); // Удаляем старые правила
         for (String someNonTerminal : nonTerminals) {
             String[] arrOfRules = null;
             for (String someRule : rules) {
@@ -208,6 +179,35 @@ public class InputAndValidate {
             }
             GrammarGenerator.mapOfRules.put(someNonTerminal, arrOfRules);
         }
+    }
+
+    public static void inputData() throws IOException {
+        /*Scanner scanner = new Scanner(System.in);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.print("Если вы хотите использовать грамматику ПО УМОЛЧАНИЮ введите цифру 0, \n" +
+                "если вы хотите ввести СВОЮ грамматику введите цифру 1: ");
+        int isUserGrammar = scanner.nextInt();
+        if (isUserGrammar == 1) {
+            System.out.println("Введите грамматику (G = {\"\"; [ , ]; [ , ]; \"\"}): ");
+            GrammarGenerator.grammar = reader.readLine();
+            // grammar = scanner.next();
+            // System.out.println(inputStr);
+        } else if (isUserGrammar != 0) {
+            System.err.println("Wrong type of input grammar mode!");
+            throw new IOException();
+        }
+
+        System.out.print("Введите диапазон длин генерируемых цепочек (start end): ");
+        GrammarGenerator.startLength = scanner.nextInt();
+        GrammarGenerator.endLength = scanner.nextInt();
+        if (GrammarGenerator.startLength < 0 || GrammarGenerator.endLength < 0 || GrammarGenerator.startLength > GrammarGenerator.endLength) {
+            System.err.println("Invalid range of generate sequences length!");
+            throw new IOException();
+        }
+        //System.out.println("Start && end: " + startLength + " && " + endLength);
+
+        scanner.close();*/
     }
 
     public static void displayMapOfRules() {

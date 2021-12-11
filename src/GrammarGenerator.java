@@ -46,21 +46,14 @@ public class GrammarGenerator {
             }
             if (!isNonTerminalExistInChain) {
                 currentChain = currentChain.replaceAll("!", "");
-                //System.out.println(currentChain);
-                resultList.add(currentChain); // TODO Отображать выведенную цепочку в форме
-                //System.out.println(listOfRuleChain);
-                outputHistoryList.add(List.copyOf(listOfRuleChain)); // TODO Отображать историю вывода в форме
+                resultList.add(currentChain); //System.out.println(currentChain);
+                outputHistoryList.add(List.copyOf(listOfRuleChain)); //System.out.println(listOfRuleChain);
                 stepCounter--;
                 listOfRuleChain.remove(listOfRuleChain.size() - 1);
                 return;
             }
         }
 
-        // S->00SAB|11S|01A|10A|!
-        // A->00A|11A|01S|10S|1|0S0
-        // S, "S", 0
-        // S, 00S, 2
-        // S, 0000S, 4
         String previousChain = currentChain;
         String nonTerminalForSteps = currentNonTerminal;
         // System.out.println(nonTerminalForSteps);
@@ -114,12 +107,12 @@ public class GrammarGenerator {
     }
 
     public static void main(String[] args) {
-        try {
+        /*try {
             InputAndValidate.inputData();
         } catch (IOException e) {
             System.err.println("Input data error!"); //e.printStackTrace();
             return;
-        }
+        }*/
 
         Grammar parsedGrammar;
         try {

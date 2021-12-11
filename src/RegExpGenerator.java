@@ -66,7 +66,7 @@ public class RegExpGenerator {
                         tempResultList = Combined(tempResultList, recursion(substr.substring(i + 1, i + indexOfClosetBracet), minLenght, maxLenght)); // TODO
                     }
                     i += indexOfClosetBracet;
-                } else if (Character.isLetter(substr.charAt(i)) || Character.isDigit(substr.charAt(i))) // Если встретили символ алфавита //  || substr.charAt(i) == '!'
+                } else if (Character.isLetter(substr.charAt(i)) || Character.isDigit(substr.charAt(i))) // Если встретили символ алфавита
                 {
                     if (i + 1 < substr.length() && substr.charAt(i + 1) == '*') // И после него стоит звёздочка
                     {
@@ -148,6 +148,6 @@ public class RegExpGenerator {
         //System.out.println(generator.solve("((b)*(a+c((g+f(b)*c)*(e+h((z+k(b)*c(g+f(b)*c)*h+k(b)*c(g+f(b)*c)*fd+k(b)*c(g+f(b)*c)*(b)*d+k(b)*d+m(g+f(b)*c)*h+m(g+f(b)*c)*fd+m(g+f(b)*c)*(b)*d)*(i+k(b)*a+k(b)*c(g+f(b)*c)*e+k(b)*c(g+f(b)*c)*fa+k(b)*c(g+f(b)*c)*(b)*a+m(g+f(b)*c)*e+m(g+f(b)*c)*fa+m(g+f(b)*c)*(b)*a))+f(b)*a+f(b)*d((z+k(b)*c(g+f(b)*c)*h+k(b)*c(g+f(b)*c)*fd+k(b)*c(g+f(b)*c)*(b)*d+k(b)*d+m(g+f(b)*c)*h+m(g+f(b)*c)*fd+m(g+f(b)*c)*(b)*d)*(i+k(b)*a+k(b)*c(g+f(b)*c)*e+k(b)*c(g+f(b)*c)*fa+k(b)*c(g+f(b)*c)*(b)*a+m(g+f(b)*c)*e+m(g+f(b)*c)*fa+m(g+f(b)*c)*(b)*a))))+d((z+k(b)*c(g+f(b)*c)*h+k(b)*c(g+f(b)*c)*fd+k(b)*c(g+f(b)*c)*(b)*d+k(b)*d+m(g+f(b)*c)*h+m(g+f(b)*c)*fd+m(g+f(b)*c)*(b)*d)*(i+k(b)*a+k(b)*c(g+f(b)*c)*e+k(b)*c(g+f(b)*c)*fa+k(b)*c(g+f(b)*c)*(b)*a+m(g+f(b)*c)*e+m(g+f(b)*c)*fa+m(g+f(b)*c)*(b)*a))))", 0, 3));
         //System.out.println(generator.solve("((b)*(a+d((z+k(b)*d)*(i+k(b)*a))))", 0, 3));
         //System.out.println(generator.solve("((b)*(a+d((z+k(g)*fd+k(g)*(b)*d)*(i+k(g)*e+k(g)*fa+k(g)*(b)*a))))", 0, 3));
-        System.out.println(generator.solve("3(1+2)(5+7)*", 0, 3)); // TODO Обработка цифр
+        System.out.println(generator.solve("3(1+2)(5+7)*", 0, 3));
     }
 }
