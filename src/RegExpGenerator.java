@@ -2,6 +2,7 @@ import org.w3c.dom.ls.LSOutput;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RegExpGenerator {
     private static List<List<String>> outputList = new LinkedList<>();
@@ -19,11 +20,11 @@ public class RegExpGenerator {
         List<String> tmp = new LinkedList<>();
         tmp = Combined(tmp, list);
         res.add("");
-        res.addAll(tmp.stream().filter(x -> x.length() <= maxLength).toList());
+        res.addAll(tmp.stream().filter(x -> x.length() <= maxLength).collect(Collectors.toList())); // todo toList
 
         while (tmp.stream().anyMatch(x -> x.length() < maxLength)) {
             tmp = Combined(tmp, list);
-            res.addAll(tmp.stream().filter(x -> x.length() <= maxLength).toList());
+            res.addAll(tmp.stream().filter(x -> x.length() <= maxLength).collect(Collectors.toList())); // todo toList
         }
 
         return res;
@@ -133,7 +134,7 @@ public class RegExpGenerator {
     }
 
     public List<String> solve(String str, int minLenght, int maxLenght) {
-        return recursion(str, minLenght, maxLenght).stream().filter(x -> x.length() >= minLenght && x.length() <= maxLenght).toList();
+        return recursion(str, minLenght, maxLenght).stream().filter(x -> x.length() >= minLenght && x.length() <= maxLenght).collect(Collectors.toList()); // todo toList
     }
 
     public static void main(String[] args) {

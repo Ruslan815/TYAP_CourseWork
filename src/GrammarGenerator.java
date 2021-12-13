@@ -47,7 +47,8 @@ public class GrammarGenerator {
             if (!isNonTerminalExistInChain) {
                 currentChain = currentChain.replaceAll("!", "");
                 resultList.add(currentChain); //System.out.println(currentChain);
-                outputHistoryList.add(List.copyOf(listOfRuleChain)); //System.out.println(listOfRuleChain);
+                List<String> tempList = new LinkedList<>(listOfRuleChain);
+                outputHistoryList.add(tempList); //System.out.println(listOfRuleChain); // TODO copyOf
                 stepCounter--;
                 listOfRuleChain.remove(listOfRuleChain.size() - 1);
                 return;

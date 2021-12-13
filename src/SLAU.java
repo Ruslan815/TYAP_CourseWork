@@ -54,10 +54,10 @@ public class SLAU {
             }
 
             // Удаляем лишний последний плюс
-            if (!alfaSb.isEmpty()) {
+            if (alfaSb.length() != 0) { // TODO isEmpty
                 alfaSb.delete(alfaSb.length() - 1, alfaSb.length());
             }
-            if (!betaSb.isEmpty()) {
+            if (betaSb.length() != 0) { // TODO isEmpty
                 betaSb.delete(betaSb.length() - 1, betaSb.length());
             }
 
@@ -68,11 +68,11 @@ public class SLAU {
             System.out.println(betaSb);
 
             // Записываем в Result = alfa*beta
-            if (!alfaSb.isEmpty() && !betaSb.isEmpty()) { // a*b
+            if (alfaSb.length() != 0 && betaSb.length() != 0) { // a*b // TODO isEmpty
                 result[currentNTIndex] = "((" + alfaSb + ")*(" + betaSb + "))";
-            } else if (alfaSb.isEmpty() && !betaSb.isEmpty()) { // b
+            } else if (alfaSb.length() == 0 && betaSb.length() != 0) { // b
                 result[currentNTIndex] = "(" + betaSb + ")";
-            } else if (!alfaSb.isEmpty() && betaSb.isEmpty()) { // a*
+            } else if (alfaSb.length() != 0 && betaSb.length() == 0) { // a*
                 result[currentNTIndex] = "(" + alfaSb + ")*";
             }
 
