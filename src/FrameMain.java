@@ -282,7 +282,7 @@ public class FrameMain extends Frame implements ActionListener {
     }
 
     public static void loadGrammarFromFile(String filename) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8))) {
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
 

@@ -72,8 +72,12 @@ public class Main {
     }
 
     private static void convertGrammarToMatrix() {
-        List<String> listOfNT = new LinkedList<>(GrammarGenerator.mapOfRules.keySet());
-        Map<String, String[]> mapOfRules = new HashMap<>(); // TODO copyOf GrammarGenerator.mapOfRules
+        List<String> listOfNT = new LinkedList<>(); // GrammarGenerator.mapOfRules.keySet()
+        for (String elTempoStr : GrammarGenerator.mapOfRules.keySet()) {
+            listOfNT.add(elTempoStr);
+        }
+
+        Map<String, String[]> mapOfRules = new HashMap<>();
         for (Map.Entry<String, String[]> entry : GrammarGenerator.mapOfRules.entrySet()) { // Копируем
             String[] tempRulesArray = new String[entry.getValue().length];
             for (int ii = 0; ii < entry.getValue().length; ii++) {
@@ -82,14 +86,14 @@ public class Main {
             mapOfRules.put(entry.getKey(), tempRulesArray);
         }
 
-        System.out.println("BEFORE");
+        /*System.out.println("BEFORE");
         for (Map.Entry<String, String[]> entry : mapOfRules.entrySet()) {
             System.out.println(entry.getKey() + ":" + Arrays.toString(entry.getValue()));
         }
         System.out.println("BEFORE");
         for (Map.Entry<String, String[]> entry : GrammarGenerator.mapOfRules.entrySet()) {
             System.out.println(entry.getKey() + ":" + Arrays.toString(entry.getValue()));
-        }
+        }*/
 
         // Создаём массив с номерами нетерминалов и их названиями
         nonTerminals = new String[mapOfRules.size() + 1]; // Плюс пустая нулевая строка
@@ -198,14 +202,14 @@ public class Main {
             }
             System.out.println();
         } System.out.println();*/
-        System.out.println("AFTER");
+        /*System.out.println("AFTER");
         for (Map.Entry<String, String[]> entry : mapOfRules.entrySet()) {
             System.out.println(entry.getKey() + ":" + Arrays.toString(entry.getValue()));
         }
         System.out.println("AFTER");
         for (Map.Entry<String, String[]> entry : GrammarGenerator.mapOfRules.entrySet()) {
             System.out.println(entry.getKey() + ":" + Arrays.toString(entry.getValue()));
-        }
+        }*/
     }
 
     // Генерирует цепочки по текущей Регулярной Грамматике
